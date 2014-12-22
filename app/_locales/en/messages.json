@@ -1,0 +1,233 @@
+{
+   "1_day_ago": {
+      "message": "Yesterday"
+   },
+   "1_hour_ago": {
+      "message": "An hour ago"
+   },
+   "1_minute_ago": {
+      "message": "A minute ago"
+   },
+   "1_month_ago": {
+      "message": "Last month"
+   },
+   "1_year_ago": {
+      "message": "Last year"
+   },
+   "a_while_ago": {
+      "message": "A blinkle ago"
+   },
+   "authorize": {
+      "message": "Authorize"
+   },
+   "big": {
+      "message": "big"
+   },
+   "cancel": {
+      "message": "Cancel"
+   },
+   "creating_note": {
+      "message": "Creating note..."
+   },
+   "date_format": {
+      "message": "mmmm d, yyyy @ HH:MM:ss"
+   },
+   "deleting_note": {
+      "message": "Removing note..."
+   },
+   "editor": {
+      "message": "Editor"
+   },
+   "error_0": {
+      "message": "Not connected to internet"
+   },
+   "error_400": {
+      "message": "Invalid request."
+   },
+   "error_401": {
+      "message": "Unauthorized access. Are you logged into Google Docs?"
+   },
+   "error_403": {
+      "message": "Forbidden access to the resource."
+   },
+   "error_404": {
+      "message": "The resource does not exist"
+   },
+   "error_409": {
+      "message": "It has detected a conflict with changes made from elsewhere"
+   },
+   "error_412": {
+      "message": "It has detected a conflict with changes made from elsewhere"
+   },
+   "error_500": {
+      "message": "Internal server error."
+   },
+   "error_503": {
+      "message": "Google Docs is not available"
+   },
+   "error_unknown": {
+      "message": "Unknown error :("
+   },
+   "just_now": {
+      "message": "Just now"
+   },
+   "loading_note": {
+      "message": "Loading note..."
+   },
+   "loading_note_list": {
+      "message": "Loading notes..."
+   },
+   "medium": {
+      "message": "medium"
+   },
+   "memento_description": {
+      "message": "Take text notes and synchronize them with your Google Account."
+   },
+   "month_1": {
+      "message": "january"
+   },
+   "month_10": {
+      "message": "october"
+   },
+   "month_11": {
+      "message": "november"
+   },
+   "month_12": {
+      "message": "december"
+   },
+   "month_2": {
+      "message": "february"
+   },
+   "month_3": {
+      "message": "march"
+   },
+   "month_4": {
+      "message": "april"
+   },
+   "month_5": {
+      "message": "may"
+   },
+   "month_6": {
+      "message": "june"
+   },
+   "month_7": {
+      "message": "july"
+   },
+   "month_8": {
+      "message": "august"
+   },
+   "month_9": {
+      "message": "september"
+   },
+   "month_abbr_1": {
+      "message": "jan"
+   },
+   "month_abbr_10": {
+      "message": "oct"
+   },
+   "month_abbr_11": {
+      "message": "nov"
+   },
+   "month_abbr_12": {
+      "message": "dec"
+   },
+   "month_abbr_2": {
+      "message": "feb"
+   },
+   "month_abbr_3": {
+      "message": "mar"
+   },
+   "month_abbr_4": {
+      "message": "apr"
+   },
+   "month_abbr_5": {
+      "message": "may"
+   },
+   "month_abbr_6": {
+      "message": "jun"
+   },
+   "month_abbr_7": {
+      "message": "jul"
+   },
+   "month_abbr_8": {
+      "message": "aug"
+   },
+   "month_abbr_9": {
+      "message": "sep"
+   },
+   "multi_note": {
+      "message": "Several notes"
+   },
+   "new_note": {
+      "message": "New note"
+   },
+   "new_tab": {
+      "message": "Open in new tab"
+   },
+   "not_sure": {
+      "message": "Better not"
+   },
+   "note_outdated": {
+      "message": "The note is open elsewhere."
+   },
+   "reload": {
+      "message": "Reload"
+   },
+   "remove": {
+      "message": "Remove"
+   },
+   "request_too_long": {
+      "message": "Is not this taking too long?"
+   },
+   "save": {
+      "message": "Save"
+   },
+   "saving_note": {
+      "message": "Saving..."
+   },
+   "search": {
+      "message": "Search"
+   },
+   "seconds_ago": {
+      "message": "A few seconds ago"
+   },
+   "single_note": {
+      "message": "A single note"
+   },
+   "small": {
+      "message": "small"
+   },
+   "starting": {
+      "message": "Initiating"
+   },
+   "sure": {
+      "message": "I'm sure"
+   },
+   "title": {
+      "message": "Title"
+   },
+   "welcome": {
+      "message": "Welcome to Memento!"
+   },
+   "welcome_p1": {
+      "message": "Before you begin to create notes we need your permission to interact with Google Docs."
+   },
+   "welcome_p2": {
+      "message": "Once we have your consent we will create a folder in which to save your notes."
+   },
+   "x_days_ago": {
+      "message": "%CT% days ago"
+   },
+   "x_hours_ago": {
+      "message": "%CT% hours ago"
+   },
+   "x_minutes_ago": {
+      "message": "%CT% minutes ago"
+   },
+   "x_months_ago": {
+      "message": "%CT% months ago"
+   },
+   "x_years_ago": {
+      "message": "%CT% years ago"
+   }
+}

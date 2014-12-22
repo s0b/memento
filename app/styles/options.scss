@@ -1,0 +1,155 @@
+@font-face {
+    font-family: "Feathergraphy";
+    src: url("../fonts/Feathergraphy2.ttf");
+}
+
+@font-face {
+    font-family: 'WalkDaWalkOne';
+    src: url('../fonts/WalkDaWalkOne.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'Permanent Marker';
+    src: url('../fonts/PermanentMarker.ttf') format('truetype');
+}
+
+html,body { height:100%; padding: 0; margin: 0; }
+
+body {
+    background: #463D37 url(../img/bg.jpg) no-repeat center center fixed;
+    background-size: cover;
+}
+
+    .wrapper {
+        text-align: center;
+        height:100%;
+    }
+
+    .wrapper:before {
+        content: '';
+        display: inline-block;
+        height: 100%;
+        vertical-align: middle;
+        margin-right: -0.25em;
+    }
+
+        .polaroid {
+            display: inline-block;
+            vertical-align: middle;
+            width: 500px;
+            height: 500px;
+            background: #fff;
+            border-radius: 1px;
+            padding: 20px 20px 100px 20px;
+            box-shadow: 0 1px 5px rgba(0,0,0,1);
+            -webkit-transform: rotate(-5deg);
+        }
+
+        .polaroid:before {
+            content: "";
+            position: absolute;
+            z-index: -1;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: url(../img/agedTexture.jpg) center center;
+            /*background-size: 100%;*/
+            background-size: 100%;
+            opacity: 0.6;
+        }
+
+            .polaroid .tape{
+                position:absolute;
+                height: 45px;
+                background: rgba(214, 172, 45, 0.2);
+                border-left: 1px dashed rgba(0, 0, 0, 0.2);
+                border-right: 1px dashed rgba(0, 0, 0, 0.2);
+                box-shadow: 0 0 3px rgba(0,0,0,0.2);
+            }
+
+            .polaroid .tape:before {
+                content: "";
+                position: absolute;
+                z-index: -1;
+                top: 0;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                background: url(../img/agedTexture.jpg) center center;
+                background-size: 100% 100%;
+                opacity: 0.3;
+            }
+
+                .polaroid .tape.top{
+                    width: 260px;
+                    top:-20px; left:165px;
+                    -webkit-transform: rotate(.5deg);
+                }
+
+                .polaroid .tape.bottom{
+                    width: 250px;
+                    bottom:-25px; left:150px;
+                    border-left: 1px dashed rgba(0, 0, 0, 0.1);
+                    border-right: 1px dashed rgba(0, 0, 0, 0.1);
+                    -webkit-transform: rotate(-4deg);
+                }
+
+            .polaroid .photo {
+                background: url(../img/polaroidPhoto.jpg) no-repeat center center;
+                background-size: 100%;
+                box-shadow:inset 0 0 2px #000;
+                height: 100%;
+                color: rgba(0, 0, 0, 0.6);
+                padding: 0;
+            }
+
+                .polaroid .photo .editor {
+                    position: absolute;
+                    top: 255px;
+                    left: 30px;
+                    -webkit-transform: rotate(-25deg) skew(0,0) translate3d( 0, 0, 0);
+                    font-family: 'WalkDaWalkOne', arial, sans-serif;
+                    width: 300px;
+                    text-align: left;
+                    font-size: 2.5em;
+                    white-space: nowrap;
+                }
+
+                    .polaroid .photo .editor .editorTitle .char1 { font-size: 1.35em; }
+                    .polaroid .photo .editor .editorTitle .char2 { font-size: 1.3em; }
+                    .polaroid .photo .editor .editorTitle .char3 { font-size: 1.25em; }
+                    .polaroid .photo .editor .editorTitle .char4 { font-size: 1.2em; }
+                    .polaroid .photo .editor .editorTitle .char5 { font-size: 1.15em; }
+                    .polaroid .photo .editor .editorTitle .char6 { font-size: 1.1em; }
+
+                    .polaroid .photo .editor .editorTitle, .polaroid .photo .editor .option {
+                        cursor: pointer;
+                    }
+
+                    .polaroid .photo .editor .option {
+                        display: none;
+                    }
+
+                .polaroid .photo .numberOfNotes {
+                    position: absolute;
+                    top: 350px;
+                    right: 200px;
+                    -webkit-transform: rotate(-40deg) skew(0,0) translate3d( 0, 0, 0);
+                    font-family: 'Feathergraphy', arial, sans-serif;
+                    font-size: 3.1em;
+                    width: 350px;
+                    text-align: right;
+                }
+
+                    .polaroid .photo .numberOfNotes .option {
+                        cursor: pointer;
+                        display:none;
+                    }
+
+                .polaroid .titlePhoto {
+                    color: #222;
+                    font-family: 'Permanent Marker', arial, sans-serif;
+                    font-size: 3em;
+                    margin-top: 0;
+                }

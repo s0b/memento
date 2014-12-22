@@ -1,0 +1,34 @@
+{
+    "background": {
+        "page": "background.html"
+    },
+    "browser_action": {
+        "default_icon": "images/ico_32.png",
+        "default_popup": "popup.html",
+        "default_title": "Memento"
+    },
+    "default_locale": "en",
+    "description": "__MSG_memento_description__",
+    "icons": {
+        "16": "images/ico_16.png",
+        "32": "images/ico_32.png",
+        "48": "images/ico_48.png",
+        "128": "images/ico_128.png"
+    },
+    "key": "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCnE04qi7o5qAw1cm3ox37hQCIbIRSgciXePWx9QvnWOF7cyHdV81NLcyxRSfmsHox8dUYuagc42SHMpTkXNqIm2G++qA1AQ1ZUtnlWmkIEFMz3rtTBOWZX7JBrzGox02Fie6TLHdK8Cjo4lVjXBzDa2TZpkxnJK7MQCNQClXGqoQIDAQAB",
+    "manifest_version": 2,
+    "name": "Memento",
+    "options_page": "options.html",
+    "permissions": [
+        "tabs",
+        "https://docs.google.com/feeds/*",
+        "https://www.google.com/accounts/OAuthGetRequestToken",
+        "https://www.google.com/accounts/OAuthAuthorizeToken",
+        "https://www.google.com/accounts/OAuthGetAccessToken"
+    ],
+    "update_url": "http://clients2.google.com/service/update2/crx",
+    "version": "1.3",
+    "web_accessible_resources": [
+        "chrome_ex_oauth.html"
+    ]
+}

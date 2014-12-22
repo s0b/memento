@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+	<head>
+        <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+        <link rel="stylesheet" type="text/css" href="/styles/popup.css" />
+		<script type="text/javascript" src="/scripts/vendor/jquery-1.8.1.min.js"></script>
+        <script type="text/javascript" src="/scripts/vendor/jquery.cuteTime.js"></script>
+        <script type="text/javascript" src="/scripts/vendor/date.format.js"></script>
+        <script type="text/javascript" src="/scripts/memento.js"></script>
+        <script type="text/javascript" src="/scripts/gdocs.js"></script>
+	</head>
+	<body>
+        <div id="wrapper">
+            <div id="loading">
+                <div class="msg">
+                    <span class="i18n_starting"></span>
+                </div>
+            </div>
+            <div id="firstTime">
+                <div class="title"><span class="i18n_welcome"></span></div>
+                <p><span class="i18n_welcome_p1"></span></p>
+                <p><span class="i18n_welcome_p2"></span></p>
+                <div class="button blue authorize"><span class="i18n_authorize"></span></div>
+                <div class="button cancel"><span class="i18n_cancel"></span></div>
+            </div>
+            <div id="mainScreen">
+                <div class="header">
+                    <div class="button new red left"><span class="i18n_new_note"></span></div>
+                    <div class="button refresh ico left"></div>
+                    <div class="button options ico right"></div>
+                    <div class="inputWrap">
+                        <input id="inputSearch" type="text" maxlength="200" autocomplete="off" value="">
+                    </div>
+                </div>
+                <div id="noteList"></div>
+            </div>
+            <div id="openNote">
+                <div class="header clearfix">
+                    <div class="button options ico left"></div>
+                    <div class="button back ico left"></div>
+                    <div class="button dropdown ico right"></div>
+                    <div class="dropdownMenu">
+                        <div class="option newtab"><span class="i18n_new_tab"></span></div>
+                        <div class="option reload"><span class="i18n_reload"></span></div>
+                        <div class="option delete"><span class="i18n_remove"></span></div>
+                        <div class="dropdownMenuNested">
+                            <div class="option notsure"><span class="i18n_not_sure"></span></div>
+                            <div class="option sure"><span class="i18n_sure"></span></div>
+                        </div>
+                    </div>
+                    <div class="button red ico save right">Ok</div>
+                    <div class="inputWrap">
+                        <input id="inputTitle" type="text" maxlength="200" autocomplete="off" value="">
+                    </div>
+                </div>
+                <iframe id="content"></iframe>
+                <div class="footer clearfix">
+                    <div id="lastMod"></div>
+                </div>
+            </div>
+            <div id="statusMsg"></div>
+		</div>
+	</body>
+</html>
