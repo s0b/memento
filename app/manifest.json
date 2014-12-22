@@ -15,7 +15,6 @@
         "48": "images/ico_48.png",
         "128": "images/ico_128.png"
     },
-    "key": "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCnE04qi7o5qAw1cm3ox37hQCIbIRSgciXePWx9QvnWOF7cyHdV81NLcyxRSfmsHox8dUYuagc42SHMpTkXNqIm2G++qA1AQ1ZUtnlWmkIEFMz3rtTBOWZX7JBrzGox02Fie6TLHdK8Cjo4lVjXBzDa2TZpkxnJK7MQCNQClXGqoQIDAQAB",
     "manifest_version": 2,
     "name": "Memento",
     "options_page": "options.html",
