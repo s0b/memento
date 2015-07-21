@@ -19,27 +19,27 @@
  *          this file was renamed to.
  */
 function ChromeExOAuth(url_request_token, url_auth_token, url_access_token,
-											 consumer_key, consumer_secret, oauth_scope, opt_args) {
-	this.url_request_token = url_request_token;
-	this.url_auth_token = url_auth_token;
-	this.url_access_token = url_access_token;
-	this.consumer_key = consumer_key;
-	this.consumer_secret = consumer_secret;
-	this.oauth_scope = oauth_scope;
-	this.app_name = opt_args && opt_args['app_name'] ||
-			"ChromeExOAuth Library";
-	this.key_token = "oauth_token";
-	this.key_token_secret = "oauth_token_secret";
-	this.callback_page = opt_args && opt_args['callback_page'] ||
-			"chrome_ex_oauth.html";
-	this.auth_params = {};
-	if (opt_args && opt_args['auth_params']) {
-		for (key in opt_args['auth_params']) {
-			if (opt_args['auth_params'].hasOwnProperty(key)) {
-				this.auth_params[key] = opt_args['auth_params'][key];
-			}
-		}
-	}
+                                             consumer_key, consumer_secret, oauth_scope, opt_args) {
+    this.url_request_token = url_request_token;
+    this.url_auth_token = url_auth_token;
+    this.url_access_token = url_access_token;
+    this.consumer_key = consumer_key;
+    this.consumer_secret = consumer_secret;
+    this.oauth_scope = oauth_scope;
+    this.app_name = opt_args && opt_args['app_name'] ||
+            "ChromeExOAuth Library";
+    this.key_token = "oauth_token";
+    this.key_token_secret = "oauth_token_secret";
+    this.callback_page = opt_args && opt_args['callback_page'] ||
+            "chrome_ex_oauth.html";
+    this.auth_params = {};
+    if (opt_args && opt_args['auth_params']) {
+        for (key in opt_args['auth_params']) {
+            if (opt_args['auth_params'].hasOwnProperty(key)) {
+                this.auth_params[key] = opt_args['auth_params'][key];
+            }
+        }
+    }
 };
 
 /*******************************************************************************
@@ -65,26 +65,26 @@ function ChromeExOAuth(url_request_token, url_auth_token, url_access_token,
  * @return {ChromeExOAuth} An initialized ChromeExOAuth object.
  */
 ChromeExOAuth.initBackgroundPage = function(oauth_config) {
-	window.chromeExOAuthConfig = oauth_config;
-	window.chromeExOAuth = ChromeExOAuth.fromConfig(oauth_config);
-	window.chromeExOAuthRedirectStarted = false;
-	window.chromeExOAuthRequestingAccess = false;
+    window.chromeExOAuthConfig = oauth_config;
+    window.chromeExOAuth = ChromeExOAuth.fromConfig(oauth_config);
+    window.chromeExOAuthRedirectStarted = false;
+    window.chromeExOAuthRequestingAccess = false;
 
-	var url_match = chrome.extension.getURL(window.chromeExOAuth.callback_page);
-	var tabs = {};
-	chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
-		if (changeInfo.url &&
-				changeInfo.url.substr(0, url_match.length) === url_match &&
-				changeInfo.url != tabs[tabId] &&
-				window.chromeExOAuthRequestingAccess == false) {
-			chrome.tabs.create({ 'url' : changeInfo.url }, function(tab) {
-				tabs[tab.id] = tab.url;
-				chrome.tabs.remove(tabId);
-			});
-		}
-	});
+    var url_match = chrome.extension.getURL(window.chromeExOAuth.callback_page);
+    var tabs = {};
+    chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
+        if (changeInfo.url &&
+                changeInfo.url.substr(0, url_match.length) === url_match &&
+                changeInfo.url != tabs[tabId] &&
+                window.chromeExOAuthRequestingAccess == false) {
+            chrome.tabs.create({ 'url' : changeInfo.url }, function(tab) {
+                tabs[tab.id] = tab.url;
+                chrome.tabs.remove(tabId);
+            });
+        }
+    });
 
-	return window.chromeExOAuth;
+    return window.chromeExOAuth;
 };
 
 /**
@@ -96,14 +96,14 @@ ChromeExOAuth.initBackgroundPage = function(oauth_config) {
  *         secret {String} The OAuth access token secret.
  */
 ChromeExOAuth.prototype.authorize = function(callback) {
-	if (this.hasToken()) {
-		callback(this.getToken(), this.getTokenSecret());
-	} else {
-		window.chromeExOAuthOnAuthorize = function(token, secret) {
-			callback(token, secret);
-		};
-		chrome.tabs.create({ 'url' :chrome.extension.getURL(this.callback_page) });
-	}
+    if (this.hasToken()) {
+        callback(this.getToken(), this.getTokenSecret());
+    } else {
+        window.chromeExOAuthOnAuthorize = function(token, secret) {
+            callback(token, secret);
+        };
+        chrome.tabs.create({ 'url' :chrome.extension.getURL(this.callback_page) });
+    }
 };
 
 /**
@@ -111,8 +111,8 @@ ChromeExOAuth.prototype.authorize = function(callback) {
  * "logout" of the configured OAuth API.
  */
 ChromeExOAuth.prototype.clearTokens = function() {
-	delete localStorage[this.key_token + encodeURI(this.oauth_scope)];
-	delete localStorage[this.key_token_secret + encodeURI(this.oauth_scope)];
+    delete localStorage[this.key_token + encodeURI(this.oauth_scope)];
+    delete localStorage[this.key_token_secret + encodeURI(this.oauth_scope)];
 };
 
 /**
@@ -122,7 +122,7 @@ ChromeExOAuth.prototype.clearTokens = function() {
  * @return {Boolean} True if an access token exists.
  */
 ChromeExOAuth.prototype.hasToken = function() {
-	return !!this.getToken();
+    return !!this.getToken();
 };
 
 /**
@@ -143,19 +143,19 @@ ChromeExOAuth.prototype.hasToken = function() {
  *         "headers" {Object} Additional headers to include in the request.
  */
 ChromeExOAuth.prototype.sendSignedRequest = function(url, callback,
-																										 opt_params) {
-	var method = opt_params && opt_params['method'] || 'GET';
-	var body = opt_params && opt_params['body'] || null;
-	var params = opt_params && opt_params['parameters'] || {};
-	var headers = opt_params && opt_params['headers'] || {};
+                                                                                                         opt_params) {
+    var method = opt_params && opt_params['method'] || 'GET';
+    var body = opt_params && opt_params['body'] || null;
+    var params = opt_params && opt_params['parameters'] || {};
+    var headers = opt_params && opt_params['headers'] || {};
 
-	var signedUrl = this.signURL(url, method, params);
+    var signedUrl = this.signURL(url, method, params);
 
-	ChromeExOAuth.sendRequest(method, signedUrl, headers, body, function (xhr) {
-		if (xhr.readyState == 4) {
-			callback(xhr.responseText, xhr);
-		}
-	});
+    ChromeExOAuth.sendRequest(method, signedUrl, headers, body, function (xhr) {
+        if (xhr.readyState == 4) {
+            callback(xhr.responseText, xhr);
+        }
+    });
 };
 
 /**
@@ -168,27 +168,27 @@ ChromeExOAuth.prototype.sendSignedRequest = function(url, callback,
  * @return {String} The base url plus any query params plus any OAuth params.
  */
 ChromeExOAuth.prototype.signURL = function(url, method, opt_params) {
-	var token = this.getToken();
-	var secret = this.getTokenSecret();
-	if (!token || !secret) {
-		throw new Error("No oauth token or token secret");
-	}
+    var token = this.getToken();
+    var secret = this.getTokenSecret();
+    if (!token || !secret) {
+        throw new Error("No oauth token or token secret");
+    }
 
-	var params = opt_params || {};
+    var params = opt_params || {};
 
-	var result = OAuthSimple().sign({
-		action : method,
-		path : url,
-		parameters : params,
-		signatures: {
-			consumer_key : this.consumer_key,
-			shared_secret : this.consumer_secret,
-			oauth_secret : secret,
-			oauth_token: token
-		}
-	});
+    var result = OAuthSimple().sign({
+        action : method,
+        path : url,
+        parameters : params,
+        signatures: {
+            consumer_key : this.consumer_key,
+            shared_secret : this.consumer_secret,
+            oauth_secret : secret,
+            oauth_token: token
+        }
+    });
 
-	return result.signed_url;
+    return result.signed_url;
 };
 
 /**
@@ -198,26 +198,26 @@ ChromeExOAuth.prototype.signURL = function(url, method, opt_params) {
  * @return {String} An Authorization header containing the oauth_* params.
  */
 ChromeExOAuth.prototype.getAuthorizationHeader = function(url, method,
-																													opt_params) {
-	var token = this.getToken();
-	var secret = this.getTokenSecret();
-	if (!token || !secret) {
-		throw new Error("No oauth token or token secret");
-	}
+                                                                                                                    opt_params) {
+    var token = this.getToken();
+    var secret = this.getTokenSecret();
+    if (!token || !secret) {
+        throw new Error("No oauth token or token secret");
+    }
 
-	var params = opt_params || {};
+    var params = opt_params || {};
 
-	return OAuthSimple().getHeaderString({
-		action: method,
-		path : url,
-		parameters : params,
-		signatures: {
-			consumer_key : this.consumer_key,
-			shared_secret : this.consumer_secret,
-			oauth_secret : secret,
-			oauth_token: token
-		}
-	});
+    return OAuthSimple().getHeaderString({
+        action: method,
+        path : url,
+        parameters : params,
+        signatures: {
+            consumer_key : this.consumer_key,
+            shared_secret : this.consumer_secret,
+            oauth_secret : secret,
+            oauth_token: token
+        }
+    });
 };
 
 /*******************************************************************************
@@ -242,18 +242,18 @@ ChromeExOAuth.prototype.getAuthorizationHeader = function(url, method,
  * @return {ChromeExOAuth} An initialized ChromeExOAuth object.
  */
 ChromeExOAuth.fromConfig = function(oauth_config) {
-	return new ChromeExOAuth(
-		oauth_config['request_url'],
-		oauth_config['authorize_url'],
-		oauth_config['access_url'],
-		oauth_config['consumer_key'],
-		oauth_config['consumer_secret'],
-		oauth_config['scope'],
-		{
-			'app_name' : oauth_config['app_name'],
-			'auth_params' : oauth_config['auth_params']
-		}
-	);
+    return new ChromeExOAuth(
+        oauth_config['request_url'],
+        oauth_config['authorize_url'],
+        oauth_config['access_url'],
+        oauth_config['consumer_key'],
+        oauth_config['consumer_secret'],
+        oauth_config['scope'],
+        {
+            'app_name' : oauth_config['app_name'],
+            'auth_params' : oauth_config['auth_params']
+        }
+    );
 };
 
 /**
@@ -262,17 +262,17 @@ ChromeExOAuth.fromConfig = function(oauth_config) {
  * chrome_ex_oauth.html.
  */
 ChromeExOAuth.initCallbackPage = function() {
-	var background_page = chrome.extension.getBackgroundPage();
-	var oauth_config = background_page.chromeExOAuthConfig;
-	var oauth = ChromeExOAuth.fromConfig(oauth_config);
-	background_page.chromeExOAuthRedirectStarted = true;
-	oauth.initOAuthFlow(function (token, secret) {
-		background_page.chromeExOAuthOnAuthorize(token, secret);
-		background_page.chromeExOAuthRedirectStarted = false;
-		chrome.tabs.getSelected(null, function (tab) {
-			chrome.tabs.remove(tab.id);
-		});
-	});
+    var background_page = chrome.extension.getBackgroundPage();
+    var oauth_config = background_page.chromeExOAuthConfig;
+    var oauth = ChromeExOAuth.fromConfig(oauth_config);
+    background_page.chromeExOAuthRedirectStarted = true;
+    oauth.initOAuthFlow(function (token, secret) {
+        background_page.chromeExOAuthOnAuthorize(token, secret);
+        background_page.chromeExOAuthRedirectStarted = false;
+        chrome.tabs.getSelected(null, function (tab) {
+            chrome.tabs.remove(tab.id);
+        });
+    });
 };
 
 /**
@@ -286,19 +286,19 @@ ChromeExOAuth.initCallbackPage = function() {
  *     onreadystatechange handler for more information.
  */
 ChromeExOAuth.sendRequest = function(method, url, headers, body, callback) {
-	var xhr = new XMLHttpRequest();
-	xhr.onreadystatechange = function(data) {
-		callback(xhr, data);
-	}
-	xhr.open(method, url, true);
-	if (headers) {
-		for (var header in headers) {
-			if (headers.hasOwnProperty(header)) {
-				xhr.setRequestHeader(header, headers[header]);
-			}
-		}
-	}
-	xhr.send(body);
+    var xhr = new XMLHttpRequest();
+    xhr.onreadystatechange = function(data) {
+        callback(xhr, data);
+    }
+    xhr.open(method, url, true);
+    if (headers) {
+        for (var header in headers) {
+            if (headers.hasOwnProperty(header)) {
+                xhr.setRequestHeader(header, headers[header]);
+            }
+        }
+    }
+    xhr.send(body);
 };
 
 /**
@@ -308,17 +308,17 @@ ChromeExOAuth.sendRequest = function(method, url, headers, body, callback) {
  *     in the encoded string.
  */
 ChromeExOAuth.formDecode = function(encoded) {
-	var params = encoded.split("&");
-	var decoded = {};
-	for (var i = 0, param; param = params[i]; i++) {
-		var keyval = param.split("=");
-		if (keyval.length == 2) {
-			var key = ChromeExOAuth.fromRfc3986(keyval[0]);
-			var val = ChromeExOAuth.fromRfc3986(keyval[1]);
-			decoded[key] = val;
-		}
-	}
-	return decoded;
+    var params = encoded.split("&");
+    var decoded = {};
+    for (var i = 0, param; param = params[i]; i++) {
+        var keyval = param.split("=");
+        if (keyval.length == 2) {
+            var key = ChromeExOAuth.fromRfc3986(keyval[0]);
+            var val = ChromeExOAuth.fromRfc3986(keyval[1]);
+            decoded[key] = val;
+        }
+    }
+    return decoded;
 };
 
 /**
@@ -327,12 +327,12 @@ ChromeExOAuth.formDecode = function(encoded) {
  *     current window's querystring.
  */
 ChromeExOAuth.getQueryStringParams = function() {
-	var urlparts = window.location.href.split("?");
-	if (urlparts.length >= 2) {
-		var querystring = urlparts.slice(1).join("?");
-		return ChromeExOAuth.formDecode(querystring);
-	}
-	return {};
+    var urlparts = window.location.href.split("?");
+    if (urlparts.length >= 2) {
+        var querystring = urlparts.slice(1).join("?");
+        return ChromeExOAuth.formDecode(querystring);
+    }
+    return {};
 };
 
 /**
@@ -344,11 +344,11 @@ ChromeExOAuth.getQueryStringParams = function() {
  * @return {Function} A closure that will call the bound function.
  */
 ChromeExOAuth.bind = function(func, obj) {
-	var newargs = Array.prototype.slice.call(arguments).slice(2);
-	return function() {
-		var combinedargs = newargs.concat(Array.prototype.slice.call(arguments));
-		func.apply(obj, combinedargs);
-	};
+    var newargs = Array.prototype.slice.call(arguments).slice(2);
+    return function() {
+        var combinedargs = newargs.concat(Array.prototype.slice.call(arguments));
+        func.apply(obj, combinedargs);
+    };
 };
 
 /**
@@ -356,12 +356,12 @@ ChromeExOAuth.bind = function(func, obj) {
  * @param {String} val The string to encode.
  */
 ChromeExOAuth.toRfc3986 = function(val){
-	 return encodeURIComponent(val)
-			 .replace(/\!/g, "%21")
-			 .replace(/\*/g, "%2A")
-			 .replace(/'/g, "%27")
-			 .replace(/\(/g, "%28")
-			 .replace(/\)/g, "%29");
+     return encodeURIComponent(val)
+             .replace(/\!/g, "%21")
+             .replace(/\*/g, "%2A")
+             .replace(/'/g, "%27")
+             .replace(/\(/g, "%28")
+             .replace(/\)/g, "%29");
 };
 
 /**
@@ -369,13 +369,13 @@ ChromeExOAuth.toRfc3986 = function(val){
  * @param {String} val The string to decode.
  */
 ChromeExOAuth.fromRfc3986 = function(val){
-	var tmp = val
-			.replace(/%21/g, "!")
-			.replace(/%2A/g, "*")
-			.replace(/%27/g, "'")
-			.replace(/%28/g, "(")
-			.replace(/%29/g, ")");
-	 return decodeURIComponent(tmp);
+    var tmp = val
+            .replace(/%21/g, "!")
+            .replace(/%2A/g, "*")
+            .replace(/%27/g, "'")
+            .replace(/%28/g, "(")
+            .replace(/%29/g, ")");
+     return decodeURIComponent(tmp);
 };
 
 /**
@@ -387,9 +387,9 @@ ChromeExOAuth.fromRfc3986 = function(val){
  *     appended, prefixing them with "&" or "?" as needed.
  */
 ChromeExOAuth.addURLParam = function(url, key, value) {
-	var sep = (url.indexOf('?') >= 0) ? "&" : "?";
-	return url + sep +
-				 ChromeExOAuth.toRfc3986(key) + "=" + ChromeExOAuth.toRfc3986(value);
+    var sep = (url.indexOf('?') >= 0) ? "&" : "?";
+    return url + sep +
+                 ChromeExOAuth.toRfc3986(key) + "=" + ChromeExOAuth.toRfc3986(value);
 };
 
 /**
@@ -397,7 +397,7 @@ ChromeExOAuth.addURLParam = function(url, key, value) {
  * @param {String} token The token to store.
  */
 ChromeExOAuth.prototype.setToken = function(token) {
-	localStorage[this.key_token + encodeURI(this.oauth_scope)] = token;
+    localStorage[this.key_token + encodeURI(this.oauth_scope)] = token;
 };
 
 /**
@@ -405,7 +405,7 @@ ChromeExOAuth.prototype.setToken = function(token) {
  * @return {String} The stored token.
  */
 ChromeExOAuth.prototype.getToken = function() {
-	return localStorage[this.key_token + encodeURI(this.oauth_scope)];
+    return localStorage[this.key_token + encodeURI(this.oauth_scope)];
 };
 
 /**
@@ -413,7 +413,7 @@ ChromeExOAuth.prototype.getToken = function() {
  * @param {String} secret The secret to store.
  */
 ChromeExOAuth.prototype.setTokenSecret = function(secret) {
-	localStorage[this.key_token_secret + encodeURI(this.oauth_scope)] = secret;
+    localStorage[this.key_token_secret + encodeURI(this.oauth_scope)] = secret;
 };
 
 /**
@@ -421,7 +421,7 @@ ChromeExOAuth.prototype.setTokenSecret = function(secret) {
  * @return {String} The stored secret.
  */
 ChromeExOAuth.prototype.getTokenSecret = function() {
-	return localStorage[this.key_token_secret + encodeURI(this.oauth_scope)];
+    return localStorage[this.key_token_secret + encodeURI(this.oauth_scope)];
 };
 
 /**
@@ -437,23 +437,23 @@ ChromeExOAuth.prototype.getTokenSecret = function() {
  *         secret {String} The OAuth access token secret.
  */
 ChromeExOAuth.prototype.initOAuthFlow = function(callback) {
-	if (!this.hasToken()) {
-		var params = ChromeExOAuth.getQueryStringParams();
-		if (params['chromeexoauthcallback'] == 'true') {
-			var oauth_token = params['oauth_token'];
-			var oauth_verifier = params['oauth_verifier']
-			this.getAccessToken(oauth_token, oauth_verifier, callback);
-		} else {
-			var request_params = {
-				'url_callback_param' : 'chromeexoauthcallback'
-			}
-			this.getRequestToken(function(url) {
-				window.location.href = url;
-			}, request_params);
-		}
-	} else {
-		callback(this.getToken(), this.getTokenSecret());
-	}
+    if (!this.hasToken()) {
+        var params = ChromeExOAuth.getQueryStringParams();
+        if (params['chromeexoauthcallback'] == 'true') {
+            var oauth_token = params['oauth_token'];
+            var oauth_verifier = params['oauth_verifier']
+            this.getAccessToken(oauth_token, oauth_verifier, callback);
+        } else {
+            var request_params = {
+                'url_callback_param' : 'chromeexoauthcallback'
+            }
+            this.getRequestToken(function(url) {
+                window.location.href = url;
+            }, request_params);
+        }
+    } else {
+        callback(this.getToken(), this.getTokenSecret());
+    }
 };
 
 /**
@@ -470,31 +470,31 @@ ChromeExOAuth.prototype.initOAuthFlow = function(callback) {
  *             taken place.
  */
 ChromeExOAuth.prototype.getRequestToken = function(callback, opt_args) {
-	if (typeof callback !== "function") {
-		throw new Error("Specified callback must be a function.");
-	}
-	var url = opt_args && opt_args['url_callback'] ||
-						window && window.top && window.top.location &&
-						window.top.location.href;
+    if (typeof callback !== "function") {
+        throw new Error("Specified callback must be a function.");
+    }
+    var url = opt_args && opt_args['url_callback'] ||
+                        window && window.top && window.top.location &&
+                        window.top.location.href;
 
-	var url_param = opt_args && opt_args['url_callback_param'] ||
-									"chromeexoauthcallback";
-	var url_callback = ChromeExOAuth.addURLParam(url, url_param, "true");
+    var url_param = opt_args && opt_args['url_callback_param'] ||
+                                    "chromeexoauthcallback";
+    var url_callback = ChromeExOAuth.addURLParam(url, url_param, "true");
 
-	var result = OAuthSimple().sign({
-		path : this.url_request_token,
-		parameters: {
-			"xoauth_displayname" : this.app_name,
-			"scope" : this.oauth_scope,
-			"oauth_callback" : url_callback
-		},
-		signatures: {
-			consumer_key : this.consumer_key,
-			shared_secret : this.consumer_secret
-		}
-	});
-	var onToken = ChromeExOAuth.bind(this.onRequestToken, this, callback);
-	ChromeExOAuth.sendRequest("GET", result.signed_url, null, null, onToken);
+    var result = OAuthSimple().sign({
+        path : this.url_request_token,
+        parameters: {
+            "xoauth_displayname" : this.app_name,
+            "scope" : this.oauth_scope,
+            "oauth_callback" : url_callback
+        },
+        signatures: {
+            consumer_key : this.consumer_key,
+            shared_secret : this.consumer_secret
+        }
+    });
+    var onToken = ChromeExOAuth.bind(this.onRequestToken, this, callback);
+    ChromeExOAuth.sendRequest("GET", result.signed_url, null, null, onToken);
 };
 
 /**
@@ -509,23 +509,23 @@ ChromeExOAuth.prototype.getRequestToken = function(callback, opt_args) {
  *     request token.
  */
 ChromeExOAuth.prototype.onRequestToken = function(callback, xhr) {
-	if (xhr.readyState == 4) {
-		if (xhr.status == 200) {
-			var params = ChromeExOAuth.formDecode(xhr.responseText);
-			var token = params['oauth_token'];
-			this.setTokenSecret(params['oauth_token_secret']);
-			var url = ChromeExOAuth.addURLParam(this.url_auth_token,
-																					"oauth_token", token);
-			for (var key in this.auth_params) {
-				if (this.auth_params.hasOwnProperty(key)) {
-					url = ChromeExOAuth.addURLParam(url, key, this.auth_params[key]);
-				}
-			}
-			callback(url);
-		} else {
-			throw new Error("Fetching request token failed. Status " + xhr.status);
-		}
-	}
+    if (xhr.readyState == 4) {
+        if (xhr.status == 200) {
+            var params = ChromeExOAuth.formDecode(xhr.responseText);
+            var token = params['oauth_token'];
+            this.setTokenSecret(params['oauth_token_secret']);
+            var url = ChromeExOAuth.addURLParam(this.url_auth_token,
+                                                                                    "oauth_token", token);
+            for (var key in this.auth_params) {
+                if (this.auth_params.hasOwnProperty(key)) {
+                    url = ChromeExOAuth.addURLParam(url, key, this.auth_params[key]);
+                }
+            }
+            callback(url);
+        } else {
+            throw new Error("Fetching request token failed. Status " + xhr.status);
+        }
+    }
 };
 
 /**
@@ -538,30 +538,30 @@ ChromeExOAuth.prototype.onRequestToken = function(callback, xhr) {
  *         secret {String} The OAuth access token secret.
  */
 ChromeExOAuth.prototype.getAccessToken = function(oauth_token, oauth_verifier,
-																									callback) {
-	if (typeof callback !== "function") {
-		throw new Error("Specified callback must be a function.");
-	}
-	var bg = chrome.extension.getBackgroundPage();
-	if (bg.chromeExOAuthRequestingAccess == false) {
-		bg.chromeExOAuthRequestingAccess = true;
+                                                                                                    callback) {
+    if (typeof callback !== "function") {
+        throw new Error("Specified callback must be a function.");
+    }
+    var bg = chrome.extension.getBackgroundPage();
+    if (bg.chromeExOAuthRequestingAccess == false) {
+        bg.chromeExOAuthRequestingAccess = true;
 
-		var result = OAuthSimple().sign({
-			path : this.url_access_token,
-			parameters: {
-				"oauth_token" : oauth_token,
-				"oauth_verifier" : oauth_verifier
-			},
-			signatures: {
-				consumer_key : this.consumer_key,
-				shared_secret : this.consumer_secret,
-				oauth_secret : this.getTokenSecret(this.oauth_scope)
-			}
-		});
+        var result = OAuthSimple().sign({
+            path : this.url_access_token,
+            parameters: {
+                "oauth_token" : oauth_token,
+                "oauth_verifier" : oauth_verifier
+            },
+            signatures: {
+                consumer_key : this.consumer_key,
+                shared_secret : this.consumer_secret,
+                oauth_secret : this.getTokenSecret(this.oauth_scope)
+            }
+        });
 
-		var onToken = ChromeExOAuth.bind(this.onAccessToken, this, callback);
-		ChromeExOAuth.sendRequest("GET", result.signed_url, null, null, onToken);
-	}
+        var onToken = ChromeExOAuth.bind(this.onAccessToken, this, callback);
+        ChromeExOAuth.sendRequest("GET", result.signed_url, null, null, onToken);
+    }
 };
 
 /**
@@ -575,19 +575,19 @@ ChromeExOAuth.prototype.getAccessToken = function(oauth_token, oauth_verifier,
  *     access token.
  */
 ChromeExOAuth.prototype.onAccessToken = function(callback, xhr) {
-	if (xhr.readyState == 4) {
-		var bg = chrome.extension.getBackgroundPage();
-		if (xhr.status == 200) {
-			var params = ChromeExOAuth.formDecode(xhr.responseText);
-			var token = params["oauth_token"];
-			var secret = params["oauth_token_secret"];
-			this.setToken(token);
-			this.setTokenSecret(secret);
-			bg.chromeExOAuthRequestingAccess = false;
-			callback(token, secret);
-		} else {
-			bg.chromeExOAuthRequestingAccess = false;
-			throw new Error("Fetching access token failed with status " + xhr.status);
-		}
-	}
+    if (xhr.readyState == 4) {
+        var bg = chrome.extension.getBackgroundPage();
+        if (xhr.status == 200) {
+            var params = ChromeExOAuth.formDecode(xhr.responseText);
+            var token = params["oauth_token"];
+            var secret = params["oauth_token_secret"];
+            this.setToken(token);
+            this.setTokenSecret(secret);
+            bg.chromeExOAuthRequestingAccess = false;
+            callback(token, secret);
+        } else {
+            bg.chromeExOAuthRequestingAccess = false;
+            throw new Error("Fetching access token failed with status " + xhr.status);
+        }
+    }
 };

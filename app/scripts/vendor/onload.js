@@ -3,5 +3,5 @@
 // found in the LICENSE file.
 
 window.onload = function() {
-	ChromeExOAuth.initCallbackPage();
+    ChromeExOAuth.initCallbackPage();
 }

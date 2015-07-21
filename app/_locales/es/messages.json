@@ -1,233 +1,233 @@
 {
-	"1_day_ago": {
-		"message": "Ayer"
-	},
-	"1_hour_ago": {
-		"message": "Hace una hora"
-	},
-	"1_minute_ago": {
-		"message": "Hace un minuto"
-	},
-	"1_month_ago": {
-		"message": "Hace un mes"
-	},
-	"1_year_ago": {
-		"message": "Hace un año"
-	},
-	"a_while_ago": {
-		"message": "Ha llovido ya"
-	},
-	"authorize": {
-		"message": "Autorizar"
-	},
-	"big": {
-		"message": "grande"
-	},
-	"cancel": {
-		"message": "Cancelar"
-	},
-	"creating_note": {
-		"message": "Creando nota..."
-	},
-	"date_format": {
-		"message": "d 'de' mmmm 'de' yyyy @ HH:MM:ss"
-	},
-	"deleting_note": {
-		"message": "Borrando nota..."
-	},
-	"editor": {
-		"message": "Editor"
-	},
-	"error_0": {
-		"message": "No hay conexion a internet"
-	},
-	"error_400": {
-		"message": "Peticion invalida."
-	},
-	"error_401": {
-		"message": "Acceso no autorizado. ¿Estas logado en Google Docs?"
-	},
-	"error_403": {
-		"message": "Acceso no permitido al recurso."
-	},
-	"error_404": {
-		"message": "El recurso no existe"
-	},
-	"error_409": {
-		"message": "Se ha detectado un conflicto con los cambios hechos desde otro lugar"
-	},
-	"error_412": {
-		"message": "Se ha detectado un conflicto con los cambios hechos desde otro lugar"
-	},
-	"error_500": {
-		"message": "Error interno del servidor."
-	},
-	"error_503": {
-		"message": "Google Docs no esta disponible"
-	},
-	"error_unknown": {
-		"message": "Error desconocido :("
-	},
-	"just_now": {
-		"message": "Ahora mismo"
-	},
-	"loading_note": {
-		"message": "Cargando nota..."
-	},
-	"loading_note_list": {
-		"message": "Cargando notas..."
-	},
-	"medium": {
-		"message": "mediano"
-	},
-	"memento_description": {
-		"message": "Tome notas de texto que se sincronizarán con su cuenta de Google."
-	},
-	"month_1": {
-		"message": "enero"
-	},
-	"month_10": {
-		"message": "octubre"
-	},
-	"month_11": {
-		"message": "noviembre"
-	},
-	"month_12": {
-		"message": "diciembre"
-	},
-	"month_2": {
-		"message": "febrero"
-	},
-	"month_3": {
-		"message": "marzo"
-	},
-	"month_4": {
-		"message": "abril"
-	},
-	"month_5": {
-		"message": "mayo"
-	},
-	"month_6": {
-		"message": "junio"
-	},
-	"month_7": {
-		"message": "julio"
-	},
-	"month_8": {
-		"message": "agosto"
-	},
-	"month_9": {
-		"message": "septiembre"
-	},
-	"month_abbr_1": {
-		"message": "ene"
-	},
-	"month_abbr_10": {
-		"message": "oct"
-	},
-	"month_abbr_11": {
-		"message": "nov"
-	},
-	"month_abbr_12": {
-		"message": "dic"
-	},
-	"month_abbr_2": {
-		"message": "feb"
-	},
-	"month_abbr_3": {
-		"message": "mar"
-	},
-	"month_abbr_4": {
-		"message": "abr"
-	},
-	"month_abbr_5": {
-		"message": "may"
-	},
-	"month_abbr_6": {
-		"message": "jun"
-	},
-	"month_abbr_7": {
-		"message": "jul"
-	},
-	"month_abbr_8": {
-		"message": "ago"
-	},
-	"month_abbr_9": {
-		"message": "sep"
-	},
-	"multi_note": {
-		"message": "Varias notas"
-	},
-	"new_note": {
-		"message": "Nueva nota"
-	},
-	"new_tab": {
-		"message": "Abrir en nueva pestaña"
-	},
-	"not_sure": {
-		"message": "Mejor no"
-	},
-	"note_outdated": {
-		"message": "La nota se ha abierto en otro lugar."
-	},
-	"reload": {
-		"message": "Recargar"
-	},
-	"remove": {
-		"message": "Eliminar"
-	},
-	"request_too_long": {
-		"message": "¿No esta tardando demasiado?"
-	},
-	"save": {
-		"message": "Guardar"
-	},
-	"saving_note": {
-		"message": "Guardando..."
-	},
-	"search": {
-		"message": "Buscar"
-	},
-	"seconds_ago": {
-		"message": "Hace unos segundos"
-	},
-	"single_note": {
-		"message": "Una sóla nota"
-	},
-	"small": {
-		"message": "pequeño"
-	},
-	"starting": {
-		"message": "Iniciando"
-	},
-	"sure": {
-		"message": "Estoy seguro"
-	},
-	"title": {
-		"message": "Título"
-	},
-	"welcome": {
-		"message": "¡Bienvenido a Memento!"
-	},
-	"welcome_p1": {
-		"message": "Antes de empezar a crear notas necesitamos tu autorizacion para poder interactuar con Google Docs."
-	},
-	"welcome_p2": {
-		"message": "Una vez tengamos tu consentimiento vamos a crear una carpeta en la que se guardarán tus notas."
-	},
-	"x_days_ago": {
-		"message": "Hace %CT% dias"
-	},
-	"x_hours_ago": {
-		"message": "Hace %CT% horas"
-	},
-	"x_minutes_ago": {
-		"message": "Hace %CT% minutos"
-	},
-	"x_months_ago": {
-		"message": "Hace %CT% meses"
-	},
-	"x_years_ago": {
-		"message": "Hace %CT% años"
-	}
+    "1_day_ago": {
+        "message": "Ayer"
+    },
+    "1_hour_ago": {
+        "message": "Hace una hora"
+    },
+    "1_minute_ago": {
+        "message": "Hace un minuto"
+    },
+    "1_month_ago": {
+        "message": "Hace un mes"
+    },
+    "1_year_ago": {
+        "message": "Hace un año"
+    },
+    "a_while_ago": {
+        "message": "Ha llovido ya"
+    },
+    "authorize": {
+        "message": "Autorizar"
+    },
+    "big": {
+        "message": "grande"
+    },
+    "cancel": {
+        "message": "Cancelar"
+    },
+    "creating_note": {
+        "message": "Creando nota..."
+    },
+    "date_format": {
+        "message": "d 'de' mmmm 'de' yyyy @ HH:MM:ss"
+    },
+    "deleting_note": {
+        "message": "Borrando nota..."
+    },
+    "editor": {
+        "message": "Editor"
+    },
+    "error_0": {
+        "message": "No hay conexion a internet"
+    },
+    "error_400": {
+        "message": "Peticion invalida."
+    },
+    "error_401": {
+        "message": "Acceso no autorizado. ¿Estas logado en Google Docs?"
+    },
+    "error_403": {
+        "message": "Acceso no permitido al recurso."
+    },
+    "error_404": {
+        "message": "El recurso no existe"
+    },
+    "error_409": {
+        "message": "Se ha detectado un conflicto con los cambios hechos desde otro lugar"
+    },
+    "error_412": {
+        "message": "Se ha detectado un conflicto con los cambios hechos desde otro lugar"
+    },
+    "error_500": {
+        "message": "Error interno del servidor."
+    },
+    "error_503": {
+        "message": "Google Docs no esta disponible"
+    },
+    "error_unknown": {
+        "message": "Error desconocido :("
+    },
+    "just_now": {
+        "message": "Ahora mismo"
+    },
+    "loading_note": {
+        "message": "Cargando nota..."
+    },
+    "loading_note_list": {
+        "message": "Cargando notas..."
+    },
+    "medium": {
+        "message": "mediano"
+    },
+    "memento_description": {
+        "message": "Tome notas de texto que se sincronizarán con su cuenta de Google."
+    },
+    "month_1": {
+        "message": "enero"
+    },
+    "month_10": {
+        "message": "octubre"
+    },
+    "month_11": {
+        "message": "noviembre"
+    },
+    "month_12": {
+        "message": "diciembre"
+    },
+    "month_2": {
+        "message": "febrero"
+    },
+    "month_3": {
+        "message": "marzo"
+    },
+    "month_4": {
+        "message": "abril"
+    },
+    "month_5": {
+        "message": "mayo"
+    },
+    "month_6": {
+        "message": "junio"
+    },
+    "month_7": {
+        "message": "julio"
+    },
+    "month_8": {
+        "message": "agosto"
+    },
+    "month_9": {
+        "message": "septiembre"
+    },
+    "month_abbr_1": {
+        "message": "ene"
+    },
+    "month_abbr_10": {
+        "message": "oct"
+    },
+    "month_abbr_11": {
+        "message": "nov"
+    },
+    "month_abbr_12": {
+        "message": "dic"
+    },
+    "month_abbr_2": {
+        "message": "feb"
+    },
+    "month_abbr_3": {
+        "message": "mar"
+    },
+    "month_abbr_4": {
+        "message": "abr"
+    },
+    "month_abbr_5": {
+        "message": "may"
+    },
+    "month_abbr_6": {
+        "message": "jun"
+    },
+    "month_abbr_7": {
+        "message": "jul"
+    },
+    "month_abbr_8": {
+        "message": "ago"
+    },
+    "month_abbr_9": {
+        "message": "sep"
+    },
+    "multi_note": {
+        "message": "Varias notas"
+    },
+    "new_note": {
+        "message": "Nueva nota"
+    },
+    "new_tab": {
+        "message": "Abrir en nueva pestaña"
+    },
+    "not_sure": {
+        "message": "Mejor no"
+    },
+    "note_outdated": {
+        "message": "La nota se ha abierto en otro lugar."
+    },
+    "reload": {
+        "message": "Recargar"
+    },
+    "remove": {
+        "message": "Eliminar"
+    },
+    "request_too_long": {
+        "message": "¿No esta tardando demasiado?"
+    },
+    "save": {
+        "message": "Guardar"
+    },
+    "saving_note": {
+        "message": "Guardando..."
+    },
+    "search": {
+        "message": "Buscar"
+    },
+    "seconds_ago": {
+        "message": "Hace unos segundos"
+    },
+    "single_note": {
+        "message": "Una sóla nota"
+    },
+    "small": {
+        "message": "pequeño"
+    },
+    "starting": {
+        "message": "Iniciando"
+    },
+    "sure": {
+        "message": "Estoy seguro"
+    },
+    "title": {
+        "message": "Título"
+    },
+    "welcome": {
+        "message": "¡Bienvenido a Memento!"
+    },
+    "welcome_p1": {
+        "message": "Antes de empezar a crear notas necesitamos tu autorizacion para poder interactuar con Google Docs."
+    },
+    "welcome_p2": {
+        "message": "Una vez tengamos tu consentimiento vamos a crear una carpeta en la que se guardarán tus notas."
+    },
+    "x_days_ago": {
+        "message": "Hace %CT% dias"
+    },
+    "x_hours_ago": {
+        "message": "Hace %CT% horas"
+    },
+    "x_minutes_ago": {
+        "message": "Hace %CT% minutos"
+    },
+    "x_months_ago": {
+        "message": "Hace %CT% meses"
+    },
+    "x_years_ago": {
+        "message": "Hace %CT% años"
+    }
 }
