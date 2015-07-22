@@ -1,3 +1,5 @@
+/* global chrome, memento */
+
 var gdocs = {};
 var bgPage = chrome.extension.getBackgroundPage();
 var DEFAULT_MIMETYPES = {
@@ -16,15 +18,15 @@ gdocs.GoogleDoc = function (entry) {
         'alternate': gdocs.getLink(entry.link, 'alternate').href
     };
     this.type = gdocs.getCategory(entry.category, 'http://schemas.google.com/g/2005#kind');
-    this.content = "";
+    this.content = '';
 };
 
 gdocs.sendRequest = function(url, callback, params) {
     var handleSuccess = function(response, xhr) {
         clearTimeout(requestTimer);
-        if (xhr.status != 200 && xhr.status != 201 && xhr.status != 304) {
-            var message = chrome.i18n.getMessage("error_" + xhr.status);
-            memento.setStatusMsg((message) ? message : chrome.i18n.getMessage("error_unknown"), true);
+        if (xhr.status !== 200 && xhr.status !== 201 && xhr.status !== 304) {
+            var message = chrome.i18n.getMessage('error_' + xhr.status);
+            memento.setStatusMsg((message) ? message : chrome.i18n.getMessage('error_unknown'), true);
             return;
         }
 
@@ -32,14 +34,14 @@ gdocs.sendRequest = function(url, callback, params) {
     };
 
     var requestTimer = setTimeout(function() {
-        memento.setStatusMsg(chrome.i18n.getMessage("request_too_long"));
+        memento.setStatusMsg(chrome.i18n.getMessage('request_too_long'));
     }, 10000);
 
     bgPage.oauth.sendSignedRequest(url, handleSuccess, params);
 };
 
 gdocs.getDocumentList = function (opt_url) {
-    memento.setStatusMsg(chrome.i18n.getMessage("loading_note_list"));
+    memento.setStatusMsg(chrome.i18n.getMessage('loading_note_list'));
 
     var params = {
         'headers': {
@@ -77,7 +79,9 @@ gdocs.processDocListResults = function (response) {
     if(data.feed.entry){
         for (var i = 0, entry; entry = data.feed.entry[i]; ++i) {
             var doc = new gdocs.GoogleDoc(entry);
-            if (doc.type.label == "document") bgPage.docs.push(doc);
+            if (doc.type.label === 'document') {
+                bgPage.docs.push(doc);
+            }
         }
     }
 
@@ -166,7 +170,7 @@ gdocs.getDocByTitle = function(title, callback) {
 };
 
 gdocs.getDocumentContent = function(docId, callback) {
-    memento.setStatusMsg(chrome.i18n.getMessage("loading_note"));
+    memento.setStatusMsg(chrome.i18n.getMessage('loading_note'));
 
     var params = {
         'method': 'GET',
@@ -189,7 +193,7 @@ gdocs.getDocumentContent = function(docId, callback) {
 };
 
 gdocs.createDoc = function (title, content, callback) {
-    memento.setStatusMsg(chrome.i18n.getMessage("creating_note"));
+    memento.setStatusMsg(chrome.i18n.getMessage('creating_note'));
 
     var params = {
         'method': 'POST',
@@ -200,7 +204,7 @@ gdocs.createDoc = function (title, content, callback) {
         'parameters': {
             'alt': 'json'
         },
-        'body': gdocs.constructContentBody_(title, "document", content)
+        'body': gdocs.constructContentBody_(title, 'document', content)
     };
 
     var handleSuccess = function (response) {
@@ -215,7 +219,7 @@ gdocs.createDoc = function (title, content, callback) {
 };
 
 gdocs.updateDoc = function(googleDocObj, callback) {
-    memento.setStatusMsg(chrome.i18n.getMessage("saving_note"));
+    memento.setStatusMsg(chrome.i18n.getMessage('saving_note'));
 
     var params = {
         'method': 'PUT',
@@ -225,7 +229,7 @@ gdocs.updateDoc = function(googleDocObj, callback) {
             'If-Match': '*'
         },
         'parameters': {'alt': 'json', 'expand-acl': true, 'format': 'html'},
-        'body': gdocs.constructContentBody_(googleDocObj.title, "document", googleDocObj.content)
+        'body': gdocs.constructContentBody_(googleDocObj.title, 'document', googleDocObj.content)
     };
 
     var handleSuccess = function(response) {
@@ -240,12 +244,12 @@ gdocs.updateDoc = function(googleDocObj, callback) {
         callback(doc);
     };
 
-    var url = "https://docs.google.com/feeds/default/media/"+ googleDocObj.resourceId; //TODO createsession
+    var url = 'https://docs.google.com/feeds/default/media/'+ googleDocObj.resourceId; //TODO createsession
     gdocs.sendRequest(url, handleSuccess, params);
 };
 
 gdocs.deleteDoc = function (docId, callback) {
-    memento.setStatusMsg(chrome.i18n.getMessage("deleting_note"));
+    memento.setStatusMsg(chrome.i18n.getMessage('deleting_note'));
     var params = {
         'method': 'DELETE',
         'headers': {
@@ -271,7 +275,7 @@ gdocs.createFolder = function(title, callback) {
         'parameters': {
             'alt': 'json'
         },
-        'body': gdocs.constructAtomXml_(title, "folder")
+        'body': gdocs.constructAtomXml_(title, 'folder')
     };
 
     var handleSuccess = function(response) {
@@ -303,7 +307,7 @@ gdocs.constructContentBody_ = function(title, docType, content) {
 };
 
 gdocs.constructAtomXml_ = function(title, type) {
-    var atom = ["<?xml version='1.0' encoding='UTF-8'?>",
+    var atom = ['<?xml version="1.0" encoding="UTF-8"?>',
         '<entry xmlns="http://www.w3.org/2005/Atom">',
         '<category scheme="http://schemas.google.com/g/2005#kind" term="http://schemas.google.com/docs/2007#', type, '"/>',
         '<title type="text">', title, '</title>',

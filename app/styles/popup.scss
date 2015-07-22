@@ -1,5 +1,7 @@
 // TODO Colors to vars
 
+@import "variables";
+
 /********************************/
 /************ System ************/
 /********************************/
@@ -107,7 +109,7 @@ input[type=text] {
     padding: 10px;
 
     .title {
-        color: #DD4B39;
+        color: $highlight;
         font-size: 1.4em;
         margin-bottom: 15px;
     }
@@ -290,13 +292,13 @@ input[type=text] {
     &.red {
         border: 1px solid transparent;
         background-color: #D14836;
-        background-image: -webkit-linear-gradient(top, #DD4B39, #D14836);
+        background-image: -webkit-linear-gradient(top, $highlight, #D14836);
         color: white;
         font-weight: bold;
 
         &:hover {
             background-color: #C53727;
-            background-image: -webkit-linear-gradient(top, #DD4B39, #C53727);
+            background-image: -webkit-linear-gradient(top, $highlight, #C53727);
             border: 1px solid #B0281A;
             border-bottom-color: #AF301F;
         }
@@ -304,7 +306,7 @@ input[type=text] {
         &:active {
             box-shadow: inset 0 1px 2px rgba(0, 0, 0, .3);
             background-color: #B0281A;
-            background-image: -webkit-linear-gradient(top, #DD4B39, #B0281A);
+            background-image: -webkit-linear-gradient(top, $highlight, #B0281A);
             border: 1px solid #992A1B;
         }
     }
@@ -337,7 +339,7 @@ input[type=text] {
     &.refresh { background-image: url('../images/reload.png'), -webkit-linear-gradient(top,#F8F8F8,#ECECEC); }
     &.back { background-image: url('../images/back.png'), -webkit-linear-gradient(top,#F8F8F8,#ECECEC); }
     &.options { background-image: url('../images/edit.png'), -webkit-linear-gradient(top,#F8F8F8,#ECECEC); }
-    &.save.processing { background-image: url('../images/loaderRed.gif'), -webkit-linear-gradient(top,#DD4B39,#D14836); }
+    &.save.processing { background-image: url('../images/loaderRed.gif'), -webkit-linear-gradient(top, $highlight, #D14836); }
     &.new { margin-right: 10px; }
     &.authorize { margin-right: 8px; }
 }

@@ -19,7 +19,9 @@ var dateFormat = function () {
         pad = function (val, len) {
             val = String(val);
             len = len || 2;
-            while (val.length < len) val = "0" + val;
+            while (val.length < len) {
+                val = '0' + val;
+            }
             return val;
         };
 
@@ -28,32 +30,34 @@ var dateFormat = function () {
         var dF = dateFormat;
 
         // You can't provide utc if you skip other args (use the "UTC:" mask prefix)
-        if (arguments.length == 1 && Object.prototype.toString.call(date) == "[object String]" && !/\d/.test(date)) {
+        if (arguments.length === 1 && Object.prototype.toString.call(date) === '[object String]' && !/\d/.test(date)) {
             mask = date;
             date = undefined;
         }
 
         // Passing date through Date applies Date.parse, if necessary
-        date = date ? new Date(date) : new Date;
-        if (isNaN(date)) throw SyntaxError("invalid date");
+        date = date ? new Date(date) : new Date();
+        if (isNaN(date)) {
+            throw new SyntaxError('invalid date');
+        }
 
-        mask = String(dF.masks[mask] || mask || dF.masks["default"]);
+        mask = String(dF.masks[mask] || mask || dF.masks['default']);
 
         // Allow setting the utc argument via the mask
-        if (mask.slice(0, 4) == "UTC:") {
+        if (mask.slice(0, 4) === 'UTC:') {
             mask = mask.slice(4);
             utc = true;
         }
 
-        var _ = utc ? "getUTC" : "get",
-            d = date[_ + "Date"](),
-            D = date[_ + "Day"](),
-            m = date[_ + "Month"](),
-            y = date[_ + "FullYear"](),
-            H = date[_ + "Hours"](),
-            M = date[_ + "Minutes"](),
-            s = date[_ + "Seconds"](),
-            L = date[_ + "Milliseconds"](),
+        var _ = utc ? 'getUTC' : 'get',
+            d = date[_ + 'Date'](),
+            D = date[_ + 'Day'](),
+            m = date[_ + 'Month'](),
+            y = date[_ + 'FullYear'](),
+            H = date[_ + 'Hours'](),
+            M = date[_ + 'Minutes'](),
+            s = date[_ + 'Seconds'](),
+            L = date[_ + 'Milliseconds'](),
             o = utc ? 0 : date.getTimezoneOffset(),
             flags = {
                 d:    d,
@@ -62,8 +66,8 @@ var dateFormat = function () {
                 dddd: dF.i18n.dayNames[D + 7],
                 m:    m + 1,
                 mm:   pad(m + 1),
-                mmm:  chrome.i18n.getMessage("month_abbr_" + (m + 1)),
-                mmmm: chrome.i18n.getMessage("month_" + (m + 1)),
+                mmm:  chrome.i18n.getMessage('month_abbr_' + (m + 1)),
+                mmmm: chrome.i18n.getMessage('month_' + (m + 1)),
                 yy:   String(y).slice(2),
                 yyyy: y,
                 h:    H % 12 || 12,
@@ -76,13 +80,13 @@ var dateFormat = function () {
                 ss:   pad(s),
                 l:    pad(L, 3),
                 L:    pad(L > 99 ? Math.round(L / 10) : L),
-                t:    H < 12 ? "a"  : "p",
-                tt:   H < 12 ? "am" : "pm",
-                T:    H < 12 ? "A"  : "P",
-                TT:   H < 12 ? "AM" : "PM",
-                Z:    utc ? "UTC" : (String(date).match(timezone) || [""]).pop().replace(timezoneClip, ""),
-                o:    (o > 0 ? "-" : "+") + pad(Math.floor(Math.abs(o) / 60) * 100 + Math.abs(o) % 60, 4),
-                S:    ["th", "st", "nd", "rd"][d % 10 > 3 ? 0 : (d % 100 - d % 10 != 10) * d % 10]
+                t:    H < 12 ? 'a'  : 'p',
+                tt:   H < 12 ? 'am' : 'pm',
+                T:    H < 12 ? 'A'  : 'P',
+                TT:   H < 12 ? 'AM' : 'PM',
+                Z:    utc ? 'UTC' : (String(date).match(timezone) || ['']).pop().replace(timezoneClip, ''),
+                o:    (o > 0 ? '-' : '+') + pad(Math.floor(Math.abs(o) / 60) * 100 + Math.abs(o) % 60, 4),
+                S:    ['th', 'st', 'nd', 'rd'][d % 10 > 3 ? 0 : (d % 100 - d % 10 !== 10) * d % 10]
             };
 
         return mask.replace(token, function ($0) {
@@ -93,25 +97,25 @@ var dateFormat = function () {
 
 // Some common format strings
 dateFormat.masks = {
-    "default":      "ddd mmm dd yyyy HH:MM:ss",
-    shortDate:      "m/d/yy",
-    mediumDate:     "mmm d, yyyy",
-    longDate:       "mmmm d, yyyy",
-    fullDate:       "dddd, mmmm d, yyyy",
-    shortTime:      "h:MM TT",
-    mediumTime:     "h:MM:ss TT",
-    longTime:       "h:MM:ss TT Z",
-    isoDate:        "yyyy-mm-dd",
-    isoTime:        "HH:MM:ss",
-    isoDateTime:    "yyyy-mm-dd'T'HH:MM:ss",
-    isoUtcDateTime: "UTC:yyyy-mm-dd'T'HH:MM:ss'Z'"
+    'default':      'ddd mmm dd yyyy HH:MM:ss',
+    shortDate:      'm/d/yy',
+    mediumDate:     'mmm d, yyyy',
+    longDate:       'mmmm d, yyyy',
+    fullDate:       'dddd, mmmm d, yyyy',
+    shortTime:      'h:MM TT',
+    mediumTime:     'h:MM:ss TT',
+    longTime:       'h:MM:ss TT Z',
+    isoDate:        'yyyy-mm-dd',
+    isoTime:        'HH:MM:ss',
+    isoDateTime:    'yyyy-mm-dd\'T\'HH:MM:ss',
+    isoUtcDateTime: 'UTC:yyyy-mm-dd\'T\'HH:MM:ss\'Z\''
 };
 
 // Internationalization strings
 dateFormat.i18n = {
     dayNames: [
-        "Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat",
-        "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"
+        'Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat',
+        'Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'
     ]
 };
 

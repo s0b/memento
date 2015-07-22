@@ -1,3 +1,5 @@
+/* global chrome, gdocs */
+
 var memento = {};
 var bgPage = chrome.extension.getBackgroundPage();
 var typingTimer = null;
@@ -8,71 +10,71 @@ memento.openNewTab = function(url) {
 };
 
 memento.updateLastMod = function (date) {
-    $("#last-mod").attr("data-timestamp", new Date(date));
-    $("#last-mod").attr("title", memento.formatDate(date, true));
-    $("#last-mod").cuteTime({ refresh: 10000 })
+    $('#last-mod').attr('data-timestamp', new Date(date));
+    $('#last-mod').attr('title', memento.formatDate(date, true));
+    $('#last-mod').cuteTime({ refresh: 10000 })
 };
 
 memento.clearLastMod = function() {
-    $("#last-mod").cuteTime.stop_cuteness();
-    $("#last-mod").html("");
+    $('#last-mod').cuteTime.stop_cuteness();
+    $('#last-mod').html('');
 };
 
 memento.setStatusMsg = function (msg, error) {
-    $("#status-msg").removeClass('error');
+    $('#status-msg').removeClass('error');
 
     if(msg){
-        $("#status-msg").html(msg).show();
+        $('#status-msg').html(msg).show();
         if(error) {
-            $("#status-msg").addClass('error');
+            $('#status-msg').addClass('error');
             setTimeout(function() { //hide error msg
                 memento.clearStatusMsg();
             }, 5000);
         }
     } else {
-        $("#status-msg").hide();
+        $('#status-msg').hide();
     }
 };
 
 memento.clearStatusMsg = function () {
-    $("#status-msg").removeClass('error');
-    $("#status-msg").hide();
+    $('#status-msg').removeClass('error');
+    $('#status-msg').hide();
 };
 
 memento.hideDropdown = function(){
-    $(".option.delete").removeClass("active");
-    $(".dropdown-menu-nested").hide();
-    $(".dropdown-menu").hide();
-    $(".button.dropdown").removeClass("pressed");
+    $('.option.delete').removeClass('active');
+    $('.dropdown-menu-nested').hide();
+    $('.dropdown-menu').hide();
+    $('.button.dropdown').removeClass('pressed');
 };
 
 memento.changeScreen = function (target) {
     memento.resetUi();
 
-    $("#loading").hide();
-    $("#first-time").hide();
-    $("#main-screen").hide();
-    $("#open-note").hide();
+    $('#loading').hide();
+    $('#first-time').hide();
+    $('#main-screen').hide();
+    $('#open-note').hide();
 
-    $("#" + target).show();
-    memento.resizeMe(target == "open-note");
+    $('#' + target).show();
+    memento.resizeMe(target === 'open-note');
 };
 
 memento.resetUi = function(){
-    //TODO too ugly!
-    //to main screen
+    // TODO too ugly! not proud of this
+    // to main screen
     bgPage.doc = null;
 
-    //to open note
-    $(".button.save").hide();
-    $(".button.newtab").show();
-    $("#open-note #input-title").val("");
-    $("#content").contents().find('html').html("");
+    // to open note
+    $('.button.save').hide();
+    $('.button.newtab').show();
+    $('#open-note #input-title').val('');
+    $('#content').contents().find('html').html('');
     memento.clearLastMod();
-    $("#input-title").removeClass("new");
-    $("#input-title").removeClass("error");
-    $(".button.dropdown").show();
-    $("#open-note").removeAttr('etag');
+    $('#input-title').removeClass('new');
+    $('#input-title').removeClass('error');
+    $('.button.dropdown').show();
+    $('#open-note').removeAttr('etag');
 };
 
 memento.renderDocList = function () {
@@ -81,7 +83,9 @@ memento.renderDocList = function () {
         var link = doc.resourceId;
         html.push(
             '<div class="note-list-item ', link, '">',
-                '<div class="date" title="', memento.formatDate(doc.entry.updated.$t, true), '">', memento.formatDate(doc.entry.updated.$t), '</div>',
+                '<div class="date" title="', memento.formatDate(doc.entry.updated.$t, true), '">',
+                    memento.formatDate(doc.entry.updated.$t),
+                '</div>',
                 '<div class="doc-title" link="', link,'">',doc.title,'</div>',
             '</div>'
         );
@@ -92,47 +96,49 @@ memento.renderDocList = function () {
 };
 
 memento.resizeMe = function(resizeEditor){
-    var width = $("#main-screen").width();
+    var width = $('#main-screen').width();
 
     if(resizeEditor) {
-        var size = (localStorage.getItem("editorSize") !== null) ? localStorage["editorSize"] : bgPage.defaultEditorSize;
+        var size = (localStorage.getItem('editorSize') !== null) ? localStorage['editorSize'] : bgPage.defaultEditorSize;
 
-        var editorWidth = bgPage.editorSizes[size]["width"];
-        var editorHeight = bgPage.editorSizes[size]["height"];
+        var editorWidth = bgPage.editorSizes[size]['width'];
+        var editorHeight = bgPage.editorSizes[size]['height'];
 
-        editorHeight -= $("#open-note").height() - $("#content").height();
+        editorHeight -= $('#open-note').height() - $('#content').height();
 
-        $("#content").width(editorWidth);
-        $("#content").height(editorHeight + 10); //add padding
+        $('#content').width(editorWidth);
+        // add padding
+        // TODO padding as var
+        $('#content').height(editorHeight + 10);
 
         width = editorWidth;
     }
 
-    var height = document.getElementById("wrapper").offsetHeight;
+    var height = document.getElementById('wrapper').offsetHeight;
 
     document.body.style.width=width;
-    document.getElementsByTagName("html")[0].style.width=width;
+    document.getElementsByTagName('html')[0].style.width=width;
     document.body.style.height=height;
-    document.getElementsByTagName("html")[0].style.height=height;
+    document.getElementsByTagName('html')[0].style.height=height;
 };
 
 memento.formatDate = function(date, fullDate){
     var sameDay = function( d1, d2 ){
-        return d1.getUTCFullYear() == d2.getUTCFullYear() &&
-               d1.getUTCMonth() == d2.getUTCMonth() &&
-               d1.getUTCDate() == d2.getUTCDate();
+        return d1.getUTCFullYear() === d2.getUTCFullYear() &&
+               d1.getUTCMonth() === d2.getUTCMonth() &&
+               d1.getUTCDate() === d2.getUTCDate();
     };
 
     var dateFormatted;
 
-    var dateParsed = new Date(Date.parse(date,"isoUtcDateTime"));
+    var dateParsed = new Date(Date.parse(date, 'isoUtcDateTime'));
     if(fullDate){
-        dateFormatted = dateParsed.format(chrome.i18n.getMessage("date_format"));
+        dateFormatted = dateParsed.format(chrome.i18n.getMessage('date_format'));
     } else {
         if(sameDay(dateParsed, new Date())){
-            dateFormatted = dateParsed.format("HH:MM");
+            dateFormatted = dateParsed.format('HH:MM');
         } else {
-            dateFormatted = dateParsed.format("d mmm");
+            dateFormatted = dateParsed.format('d mmm');
         }
     }
 
@@ -142,7 +148,7 @@ memento.formatDate = function(date, fullDate){
 
 memento.loadSingleNote = function() {
     gdocs.getDocByTitle(
-        localStorage["singleNoteTitle"],
+        localStorage['singleNoteTitle'],
         function(doc){
             var openDoc = function(doc){
                 gdocs.getDocumentContent(doc.resourceId, memento.setNoteContent);
@@ -152,8 +158,8 @@ memento.loadSingleNote = function() {
                 openDoc(doc)
             } else {  // doc must be created
                 gdocs.createDoc(
-                    localStorage["singleNoteTitle"],
-                    "",
+                    localStorage['singleNoteTitle'],
+                    '',
                     function (doc){
                         openDoc(doc);
                     }
@@ -166,22 +172,26 @@ memento.loadSingleNote = function() {
 memento.setNoteContent = function (docId, content) {
     memento.changeScreen('open-note');
 
-    //TODO wysiwyg - not proud about this replacements, just a workaround
+    // TODO wysiwyg - not proud about this replacements, just a workaround
     // remove styles added by Google Docs
-    content = content.replace(/<style[^>]*>(.*?)<\/style>/gi, "");
+    content = content.replace(/<style[^>]*>(.*?)<\/style>/gi, '');
 
     // avoid an error about moving with arrow keys over empty lines
-    content = content.replace(/<span( class=\"[\w]+\")?><\/span>/gi, "<br>");
+    content = content.replace(/<span( class=\"[\w]+\")?><\/span>/gi, '<br>');
 
-    $("#content").contents().find('html').html(content);
-    $("#content").contents().find("head").append($("<link/>", { rel: "stylesheet", href: "../css/document.css", type: "text/css" }));
+    $('#content').contents().find('html').html(content);
+
+    // FIXME This way to include the css its repeated
+    $('#content').contents().find('head').append(
+        $('<link/>', { rel: 'stylesheet', href: '../css/document.css', type: 'text/css' })
+    );
 
     memento.resizeMe(true);
 
     gdocs.getDocById(docId, function(doc){
         bgPage.doc = doc;
-        $("#open-note").attr('etag', doc.entry.gd$etag);
-        $("#open-note #input-title").val(doc.title);
+        $('#open-note').attr('etag', doc.entry.gd$etag);
+        $('#open-note #input-title').val(doc.title);
         memento.updateLastMod(doc.entry.updated.$t);
         memento.clearStatusMsg();
     });
@@ -191,14 +201,14 @@ memento.manageNoteChange = function (e) {
     var keyCodes = [37, 38, 39, 40];
 
     // check if is a new doc and isnt an arrow key
-    if(((bgPage.doc && bgPage.doc.resourceId) && !bgPage.isUpdating) && jQuery.inArray(e.keyCode, keyCodes) == '-1'){
+    if(((bgPage.doc && bgPage.doc.resourceId) && !bgPage.isUpdating) && jQuery.inArray(e.keyCode, keyCodes) === '-1'){
         clearTimeout(typingTimer);
 
         typingTimer = setTimeout(function(){
-            if($("#input-title").val() && $("#input-title").val().length > 0) {
+            if($('#input-title').val() && $('#input-title').val().length > 0) {
                 bgPage.isUpdating = true;
 
-                $("#input-title").removeClass("error");
+                $('#input-title').removeClass('error');
                 /*gdocs.getDocById(bgPage.doc.resourceId, function(doc){
                     if(doc.entry.gd$etag != $("#open-note").attr('etag')) {
                      memento.setStatusMsg(
@@ -222,7 +232,7 @@ memento.manageNoteChange = function (e) {
                 //until the etag check works, just updateNote
                 memento.updateNote();
             } else {
-                $("#input-title").addClass("error");
+                $('#input-title').addClass('error');
             }
         }, 1000);
     }
@@ -243,7 +253,7 @@ memento.insertHtmlAfterSelection = function(html) {
 
             // Range.createContextualFragment() would be useful here but is
             // non-standard and not supported in all browsers (IE9, for one)
-            var el = doc.createElement("div");
+            var el = doc.createElement('div');
             el.innerHTML = html;
             var frag = doc.createDocumentFragment(), node, lastNode;
             while ( (node = el.firstChild) ) {
@@ -264,20 +274,20 @@ memento.insertHtmlAfterSelection = function(html) {
         expandedSelRange = range.duplicate();
         range.collapse(false);
         range.pasteHTML(html);
-        expandedSelRange.setEndPoint("EndToEnd", range);
+        expandedSelRange.setEndPoint('EndToEnd', range);
         expandedSelRange.select();
     }
 };
 
 memento.linkify = function(text) {
     var regex = /(http|https|ftp)\:\/\/[a-zA-Z0-9\-\.]+\.[a-zA-Z]{2,3}(:[a-zA-Z0-9]*)?\/?([a-zA-Z0-9\-\._\?\,\'\/\\\+&amp;%\$#\=~])*/g;
-    return text.replace(regex,"<a href='$&'>$&</a>");
+    return text.replace(regex, '<a href="$&">$&</a>');
 };
 
 memento.cleanHtml = function(html) {
-    html = html.replace(/<html[^>]*?>(.*)/gim, "$1");
+    html = html.replace(/<html[^>]*?>(.*)/gim, '$1');
     html = html.replace(/<\/html>/gi, '');
-    html = html.replace(/<body[^>]*?>(.*)/gi, "$1");
+    html = html.replace(/<body[^>]*?>(.*)/gi, '$1');
     html = html.replace(/<\/body>/gi, '');
 
     // remove style, meta and link tags
@@ -303,8 +313,8 @@ memento.cleanHtml = function(html) {
     html = html.replace(/\s*mso-[^:]+:[^;"']+;?/gi, '');
 
     // remove styles.
-    html = html.replace(/<(\w[^>]*) style='([^\']*)'([^>]*)/gim, "<$1$3");
-    html = html.replace(/<(\w[^>]*) style="([^\"]*)"([^>]*)/gim, "<$1$3");
+    html = html.replace(/<(\w[^>]*) style='([^\']*)'([^>]*)/gim, '<$1$3');
+    html = html.replace(/<(\w[^>]*) style="([^\"]*)"([^>]*)/gim, '<$1$3');
 
     // remove "bad" tags
     html = html.replace(/<\s+[^>]*>/gi, '');
@@ -325,10 +335,14 @@ memento.cleanHtml = function(html) {
     html = html.replace(/<([^\s>]+)(\s[^>]*)?>\s*<\/\1>/g, '');
 
     // remove most of html elements, inline styles and other attributes
-    var white="p|span";
-    var black="script|object|embed";
-    regexp=new RegExp("(<("+black+")[^>]*>.*</\\2>|(?!<[/]?("+white+")(\\s[^<]*>|[/]>|>))<[^<>]*>|(?!<[^<>\\s]+)\\s[^</>]+(?=[/>]))", "gi");
-    html = html.replace(regexp,"");
+    var white = 'p|span';
+    var black = 'script|object|embed';
+    var regexp = new RegExp(
+        '(<('+black+')[^>]*>.*</\\2>|(?!<[/]?('+white+')(\\s[^<]*>|[/]>|>))<[^<>]*>|(?!<[^<>\\s]+)\\s[^</>]+(?=[/>]))',
+        'gi'
+    );
+
+    html = html.replace(regexp, '');
 
     html = html.trim();
 
@@ -349,13 +363,13 @@ memento.cleanHtml = function(html) {
 memento.updateNote = function () {
     var doc = bgPage.doc;
 
-    doc.title = $("#input-title").val();
-    doc.content = $("#content").contents().find('html').html();
+    doc.title = $('#input-title').val();
+    doc.content = $('#content').contents().find('html').html();
 
     gdocs.updateDoc(
         doc,
         function(doc) {
-            $("#open-note").attr('etag', doc.entry.gd$etag);
+            $('#open-note').attr('etag', doc.entry.gd$etag);
             memento.updateLastMod(new Date());
             bgPage.isUpdating = false;
             bgPage.doc = doc;
@@ -364,40 +378,41 @@ memento.updateNote = function () {
 };
 
 memento.createNote = function () {
-    var title = $("#input-title").val();
-    var content = $("#content").contents().find('html').html();
+    var title = $('#input-title').val();
+    var content = $('#content').contents().find('html').html();
 
     if(title.length > 0) {
         var handleSuccess = function (doc) {
-            $(".button.save").removeClass("processing");
-            $(".button.save").text("Ok");
-            $(".button.save").hide();
-            $(".button.dropdown").show();
-            $("#input-title").removeClass("new");
+            $('.button.save').removeClass('processing');
+            $('.button.save').text('Ok'); // TODO move to translations
+            $('.button.save').hide();
+            $('.button.dropdown').show();
+            $('#input-title').removeClass('new');
             memento.updateLastMod(doc.entry.updated.$t);
-            $("#open-note").attr('etag', doc.entry.gd$etag);
+            $('#open-note').attr('etag', doc.entry.gd$etag);
             bgPage.doc = doc;
         };
 
-        $("#input-title").removeClass("error");
-        $(".button.save").text("");
-        $(".button.save").addClass("processing");
+        $('#input-title').removeClass('error');
+        $('.button.save').text('');
+        $('.button.save').addClass('processing');
 
         gdocs.createDoc(title, content, handleSuccess);
     } else {
-        $("#input-title").addClass("error");
+        $('#input-title').addClass('error');
     }
 };
 
 memento.loadI18nStrings = function () {
-    var nodes = document.querySelectorAll("[class^='i18n_']");
+    var nodes = document.querySelectorAll('[class^="i18n_"]');
     for(var i = 0; i < nodes.length; i++) {
-        var arguments = JSON.parse("[" + nodes[i].textContent + "]");
+        var args = JSON.parse('[' + nodes[i].textContent + ']');
         var stringName = nodes[i].className.split(/\s/)[0].substring(5);
-        if(arguments.length > 0)
-            nodes[i].innerHTML = chrome.i18n.getMessage(stringName, arguments);
-        else
+        if(arguments.length > 0) {
+            nodes[i].innerHTML = chrome.i18n.getMessage(stringName, args);
+        } else{
             nodes[i].innerHTML = chrome.i18n.getMessage(stringName);
+        }
     }
 };
 
@@ -415,7 +430,7 @@ $(document).ready(function () {
                 bgPage.folderId = folderId;
             }
 
-            if(localStorage.getItem("singleNote") !== null && localStorage["singleNote"] == 'true'){
+            if(localStorage.getItem('singleNote') !== null && localStorage['singleNote'] === 'true'){
                 $('.button.back').hide();
                 $('.option.delete').hide();
                 $('#open-note .button.options').show();
@@ -453,53 +468,56 @@ $(document).ready(function () {
     }
 
     // buttons
-    $(".button.back").click(function() {
+    $('.button.back').click(function() {
         memento.changeScreen('main-screen');
         gdocs.getDocumentList();
     });
 
-    $(".button.new").click(function() {
+    $('.button.new').click(function() {
         memento.changeScreen('open-note');
         memento.clearLastMod();
-        $(".button.dropdown").hide();
-        $(".button.save").show();
-        $("#input-title").addClass("new");
+        $('.button.dropdown').hide();
+        $('.button.save').show();
+        $('#input-title').addClass('new');
 
-        //TODO wysiwyg
-        $("#content").contents().find("head").append($("<link/>", { rel: "stylesheet", href: "../css/document.css", type: "text/css" }));
+        // TODO wysiwyg
+        // FIXME This way to include the css its repeated
+        $('#content').contents().find('head').append(
+            $('<link/>', { rel: 'stylesheet', href: '../css/document.css', type: 'text/css' })
+        );
     });
 
-    $(".button.save").click(function(){
+    $('.button.save').click(function(){
         memento.createNote();
     });
 
-    $(".button.refresh").click(function() {
+    $('.button.refresh').click(function() {
         gdocs.getDocumentList();
     });
 
-    $(".button.options").click(function() {
-        memento.openNewTab("options.html");
+    $('.button.options').click(function() {
+        memento.openNewTab('options.html');
     });
 
-    $(".button.dropdown").click(function(e) {
-        if($(".dropdown-menu").is(":visible")){
-            $(".button.dropdown").removeClass("pressed");
-            $(".dropdown-menu").hide();
+    $('.button.dropdown').click(function(e) {
+        if($('.dropdown-menu').is(':visible')){
+            $('.button.dropdown').removeClass('pressed');
+            $('.dropdown-menu').hide();
         } else {
-            $(".button.dropdown").addClass("pressed");
-            $(".dropdown-menu").show();
+            $('.button.dropdown').addClass('pressed');
+            $('.dropdown-menu').show();
         }
 
         e.stopPropagation();
     });
 
-    $(".button.authorize").click(function() {
+    $('.button.authorize').click(function() {
         bgPage.oauth.authorize(function(){
             // this callback is mandatory to close the tab, even if it is empty :(
         });
     });
 
-    $(".button.cancel").click(function() {
+    $('.button.cancel').click(function() {
         window.close();
     });
 
@@ -508,29 +526,29 @@ $(document).ready(function () {
         memento.hideDropdown();
     });
 
-    $(".option.newtab").click(function() {
+    $('.option.newtab').click(function() {
         gdocs.getDocById(bgPage.doc.resourceId, function(doc){
             memento.openNewTab(gdocs.getLink(doc.entry.link, 'alternate').href);
         });
     });
 
-    $(".option.delete").click(function(e) {
-        if($(".option.delete").hasClass("active")){
-            $(".option.delete").removeClass("active");
-            $(".dropdown-menu-nested").hide();
+    $('.option.delete').click(function(e) {
+        if($('.option.delete').hasClass('active')){
+            $('.option.delete').removeClass('active');
+            $('.dropdown-menu-nested').hide();
         } else {
-            $(".option.delete").addClass("active");
-            $(".dropdown-menu-nested").show();
+            $('.option.delete').addClass('active');
+            $('.dropdown-menu-nested').show();
         }
 
         e.stopPropagation();
     });
 
-    $(".option.notsure").click(function() {
+    $('.option.notsure').click(function() {
         memento.hideDropdown();
     });
 
-    $(".option.sure").click(function() {
+    $('.option.sure').click(function() {
         gdocs.deleteDoc(
             bgPage.doc.resourceId,
             function(){
@@ -540,14 +558,14 @@ $(document).ready(function () {
         );
     });
 
-    $(".option.reload").click(function() {
+    $('.option.reload').click(function() {
         gdocs.getDocumentContent(bgPage.doc.resourceId, memento.setNoteContent);
     });
 
     // inputs
     $('#input-title').keyup(function(e){
-        if($(this).hasClass("new")) {
-            if(e.keyCode == 13) {
+        if($(this).hasClass('new')) {
+            if(e.keyCode === 13) {
                 memento.createNote();
             }
         } else {
@@ -556,33 +574,33 @@ $(document).ready(function () {
     });
 
     $('#input-title').change(function(){
-        if($("#input-title").val().length == 0) {
-            $("#input-title").addClass("error");
-        } else if($("#input-title").hasClass("error")) {
-            $("#input-title").removeClass("error");
+        if($('#input-title').val().length === 0) {
+            $('#input-title').addClass('error');
+        } else if($('#input-title').hasClass('error')) {
+            $('#input-title').removeClass('error');
         }
     });
 
-    $("#input-title").attr("placeholder", chrome.i18n.getMessage("title"));
+    $('#input-title').attr('placeholder', chrome.i18n.getMessage('title'));
 
     $('#inputSearch').keyup(function(){
         for(var i = 0; i < bgPage.docs.length; i++ ) {
             var doc = bgPage.docs[i];
             if($('#inputSearch').val()) {
-                if (doc.title.toLowerCase().indexOf($('#inputSearch').val().toLowerCase()) == -1){
-                    $(".note-list-item." + doc.resourceId).hide();
+                if (doc.title.toLowerCase().indexOf($('#inputSearch').val().toLowerCase()) === -1){
+                    $('.note-list-item.' + doc.resourceId).hide();
                 } else {
-                    $(".note-list-item." + doc.resourceId).show();
+                    $('.note-list-item.' + doc.resourceId).show();
                 }
             } else {
-                $(".note-list-item." + doc.resourceId).show();
+                $('.note-list-item.' + doc.resourceId).show();
             }
 
             memento.resizeMe();
         }
     });
 
-    $("#inputSearch").attr("placeholder", chrome.i18n.getMessage("search"));
+    $('#inputSearch').attr('placeholder', chrome.i18n.getMessage('search'));
 
     // set iframe as editable
     $('#content').contents().get(0).designMode = 'on';
