@@ -21,7 +21,7 @@
         "message": "Authorize"
     },
     "big": {
-        "message": "big"
+        "message": "Big"
     },
     "cancel": {
         "message": "Cancel"
@@ -78,7 +78,7 @@
         "message": "Loading notes..."
     },
     "medium": {
-        "message": "medium"
+        "message": "Medium"
     },
     "memento_description": {
         "message": "Take text notes and synchronize them with your Google Account."
@@ -155,8 +155,8 @@
     "month_abbr_9": {
         "message": "sep"
     },
-    "multi_note": {
-        "message": "Several notes"
+    "multiple": {
+        "message": "Multiple"
     },
     "new_note": {
         "message": "New note"
@@ -169,6 +169,18 @@
     },
     "note_outdated": {
         "message": "The note is open elsewhere."
+    },
+    "options": {
+        "message": "Options"
+    },
+    "options_size_title": {
+        "message": "Size of the text editor"
+    },
+    "options_number_title": {
+        "message": "Single or multiple notes?"
+    },
+    "refresh": {
+        "message": "Refresh"
     },
     "reload": {
         "message": "Reload"
@@ -191,11 +203,11 @@
     "seconds_ago": {
         "message": "A few seconds ago"
     },
-    "single_note": {
-        "message": "A single note"
+    "single": {
+        "message": "Single"
     },
     "small": {
-        "message": "small"
+        "message": "Small"
     },
     "starting": {
         "message": "Initiating"

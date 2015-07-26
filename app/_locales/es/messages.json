@@ -21,7 +21,7 @@
         "message": "Autorizar"
     },
     "big": {
-        "message": "grande"
+        "message": "Grande"
     },
     "cancel": {
         "message": "Cancelar"
@@ -78,7 +78,7 @@
         "message": "Cargando notas..."
     },
     "medium": {
-        "message": "mediano"
+        "message": "Mediano"
     },
     "memento_description": {
         "message": "Tome notas de texto que se sincronizarán con su cuenta de Google."
@@ -155,8 +155,8 @@
     "month_abbr_9": {
         "message": "sep"
     },
-    "multi_note": {
-        "message": "Varias notas"
+    "multiple": {
+        "message": "Varias"
     },
     "new_note": {
         "message": "Nueva nota"
@@ -169,6 +169,18 @@
     },
     "note_outdated": {
         "message": "La nota se ha abierto en otro lugar."
+    },
+    "options": {
+        "message": "Opciones"
+    },
+    "options_size_title": {
+        "message": "Tamaño del editor"
+    },
+    "options_number_title": {
+        "message": "Una o varias notas?"
+    },
+    "refresh": {
+        "message": "Actualizar"
     },
     "reload": {
         "message": "Recargar"
@@ -191,11 +203,11 @@
     "seconds_ago": {
         "message": "Hace unos segundos"
     },
-    "single_note": {
-        "message": "Una sóla nota"
+    "single": {
+        "message": "Una"
     },
     "small": {
-        "message": "pequeño"
+        "message": "Pequeño"
     },
     "starting": {
         "message": "Iniciando"

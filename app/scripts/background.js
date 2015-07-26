@@ -1,11 +1,14 @@
-var DOCLIST_SCOPE = 'https://docs.google.com/feeds/';
-var DOCLIST_FEED = DOCLIST_SCOPE + 'default/private/full/';
+/* jshint unused: false */
+
 var doc = null;
 var docs = [];
+
 var folder = 'Memento notes';
 var folderId = null;
+
 var defaultDocTitle = 'Memento';
 var defaultEditorSize = 'medium';
+var defaultNumberOfNotes = 'multi';
 
 var editorSizes = {
     'small': {
@@ -21,13 +24,3 @@ var editorSizes = {
         'height': '480'
     }
 };
-
-var oauth = ChromeExOAuth.initBackgroundPage({
-    'request_url': 'https://www.google.com/accounts/OAuthGetRequestToken',
-    'authorize_url': 'https://www.google.com/accounts/OAuthAuthorizeToken',
-    'access_url': 'https://www.google.com/accounts/OAuthGetAccessToken',
-    'consumer_key': 'anonymous',
-    'consumer_secret': 'anonymous',
-    'scope': DOCLIST_SCOPE,
-    'app_name': 'Memento'
-});

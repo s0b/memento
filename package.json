@@ -27,6 +27,6 @@
         "grunt-contrib-watch": "^0.6.1",
         "jshint-stylish": "^1.0.2",
         "load-grunt-tasks": "^1.0.0",
-        "time-grunt": "^1.2.1
+        "time-grunt": "^1.2.1"
     }
 }

@@ -3,11 +3,12 @@
     <head>
         <meta http-equiv="content-type" content="text/html; charset=UTF-8">
         <link rel="stylesheet" type="text/css" href="/styles/popup.css" />
-        <script type="text/javascript" src="/scripts/vendor/jquery-1.8.1.min.js"></script>
+        <script type="text/javascript" src="/scripts/vendor/jquery.min.js"></script>
         <script type="text/javascript" src="/scripts/vendor/jquery.cuteTime.js"></script>
         <script type="text/javascript" src="/scripts/vendor/date.format.js"></script>
-        <script type="text/javascript" src="/scripts/memento.js"></script>
         <script type="text/javascript" src="/scripts/gdocs.js"></script>
+        <script type="text/javascript" src="/scripts/memento.js"></script>
+        <script type="text/javascript" src="https://apis.google.com/js/client.js?onload=gapiIsLoaded"></script>
     </head>
     <body>
         <div id="wrapper">
@@ -26,10 +27,13 @@
             <div id="main-screen">
                 <div class="header">
                     <div class="button new red left"><span class="i18n_new_note"></span></div>
-                    <div class="button refresh ico left"></div>
-                    <div class="button options ico right"></div>
-                    <div class="inputWrap">
-                        <input id="inputSearch" type="text" maxlength="200" autocomplete="off" value="">
+                    <div class="button dropdown ico right"></div>
+                    <div class="dropdown-menu">
+                        <div class="option refresh"><span class="i18n_refresh"></span></div>
+                        <div class="option options"><span class="i18n_options"></span></div>
+                    </div>
+                    <div class="input-wrap">
+                        <input id="input-search" type="text" maxlength="200" autocomplete="off" value="">
                     </div>
                 </div>
                 <div id="note-list"></div>

@@ -1,36 +1,17 @@
 /* global chrome */
 
-// TODO loadI18nStrings is the same than memento.loadI18nStrings
-
 var bgPage = chrome.extension.getBackgroundPage();
 
-function swapOption(scope, lookFor, callback) {
-    $(scope).fadeOut('fast', function() {
-        var element = null;
-
-        if($(scope).next(lookFor).length !== 0) {
-            element = $(scope).next(lookFor);
-        } else {
-            element = $(scope).prevAll(lookFor).last();
-        }
-
-        callback(element);
-
-        element.fadeIn('fast');
-    });
-}
-
 function restoreOptions() {
+    // TODO remove repeated code
+
     //editor
     var size = (localStorage.getItem('editorSize') !== null) ? localStorage['editorSize'] : bgPage.defaultEditorSize;
-    $('span.option[size="' + size + '"]').show();
+    $('.editor input[value=' + size + ']').prop('checked', true );
 
     //notes
-    if (localStorage['singleNote'] === 'true') {
-        $('.numberOfNotes .single-note').show();
-    } else {
-        $('.numberOfNotes .multi-note').show();
-    }
+    var numberOfNotes = (localStorage.getItem('numberOfNotes') !== null) ? localStorage['numberOfNotes'] : bgPage.defaultNumberOfNotes;
+    $('.number-of-notes input[value=' +  numberOfNotes + ']').prop('checked', true );
 }
 
 function loadI18nStrings() {
@@ -51,21 +32,11 @@ $(document).ready(function () {
 
     loadI18nStrings();
 
-    $('.editor .editor-title, .editor .option').click(function(){
-        swapOption($('.editor .option:visible'), 'span.option', function(element) {
-            localStorage['editorSize'] = $(element).attr('size');
-        });
+    $('input[type=radio][name=size]').change(function() {
+        localStorage['editorSize'] = $(this).val();
     });
 
-    $('.numberOfNotes .option').click(function(){
-        swapOption(this, 'span.option', function(element) {
-            if (localStorage.getItem('singleNoteTitle') === null) {
-                localStorage['singleNoteTitle'] = bgPage.defaultDocTitle;
-            }
-
-            localStorage['singleNote'] = $(element).attr('singleNote');
-        });
+    $('input[type=radio][name=notes]').change(function() {
+        localStorage['numberOfNotes'] = $(this).val();
     });
-
-    $('.editor-title').lettering();
 });

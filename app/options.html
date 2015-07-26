@@ -4,28 +4,32 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <title>Memento</title>
     <link rel="stylesheet" type="text/css" href="/styles/options.css" />
-    <script type="text/javascript" src="/scripts/vendor/jquery-1.8.1.min.js"></script>
-    <script type="text/javascript" src="/scripts/vendor/jquery.lettering-0.6.min.js"></script>
+    <script type="text/javascript" src="/scripts/vendor/jquery.min.js"></script>
     <script type="text/javascript" src="/scripts/options.js"></script>
 </head>
 <body>
     <div class="wrapper">
-        <div class="polaroid">
-             <div class="tape top"></div>
-            <div class="photo">
-                <div class="editor">
-                    <span class="editor-title"><span class="i18n_editor"></span></span>
-                    <span class="option small" size="small"><span class="i18n_small"></span></span>
-                    <span class="option medium" size="medium"><span class="i18n_medium"></span></span>
-                    <span class="option big" size="big"><span class="i18n_big"></span></span>
+        <div class="container">
+            <div class="header">Memento</div>
+            <div class="options">
+                <div class="item editor">
+                    <div class="title"><span class="i18n_options_size_title"></div>
+                    <form action="">
+                        <label><input type="radio" name="size" value="small"><span class="i18n_small"></span></label>
+                        <label><input type="radio" name="size" value="medium"><span class="i18n_medium"></span></label>
+                        <label><input type="radio" name="size" value="big"><span class="i18n_big"></span></label>
+                    </form>
                 </div>
-                <div class="number-of-notes">
-                    <span class="option single-note" singleNote="true"><span class="i18n_single_note"></span></span>
-                    <span class="option multi-note" singleNote="false"><span class="i18n_multi_note"></span></span>
+                <hr>
+                <div class="item number-of-notes">
+                    <div class="title"><span class="i18n_options_number_title"></div>
+                    <form action="">
+                        <label><input type="radio" name="number" value="single"><span class="i18n_single"></span></label>
+                        <label><input type="radio" name="number" value="multi"><span class="i18n_multiple"></span></label>
+                    </form>
                 </div>
             </div>
-            <div class="title-photo">Memento</div>
-            <div class="tape bottom"></div>
+            <div class="footer">Something to mention? Please drop me a mail! <a href="mailto:dmartinfrutos@gmail.com">dmartinfrutos@gmail.com</a></div>
         </div>
     </div>
 </body>

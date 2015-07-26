@@ -27,13 +27,17 @@ module.exports = function(grunt) {
             gruntfile: {
                 files: ['Gruntfile.js']
             },
+            json: {
+                files: ['<%= config.app %>/{,*/}*.json'],
+                tasks: ['copy:chrome']
+            },
             scripts: {
                 files: ['<%= config.app %>/scripts/{,*/}*.js'],
-                tasks: ['uglify:chrome']
+                tasks: ['copy:chrome']
             },
             html: {
                 files: ['<%= config.app %>/{,*/}*.html'],
-                tasks: ['htmlmin:chrome']
+                tasks: ['copy:chrome']
             }
         },
 
@@ -167,6 +171,7 @@ module.exports = function(grunt) {
                         'styles/{,*/}*.css',
                         'scripts/{,*/}*.js',
                         '_locales/{,*/}*.json',
+                        '{,*/}*.html'
                     ]
                 }]
             },
@@ -252,13 +257,14 @@ module.exports = function(grunt) {
         'jshint',
         'chromeManifest:dist',
         'concurrent:dist',
+        // TODO uglify
         'copy:dist'
     ]);
 
     grunt.registerTask('default', function() {
         grunt.task.run([
             'clean:dist',
-            'jshint',
+            //'jshint',
             'concurrent:chrome',
             'copy:chrome',
             'watch',

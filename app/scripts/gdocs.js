@@ -1,329 +1,194 @@
-/* global chrome, memento */
+/* global chrome, gapi, memento */
 
-var gdocs = {};
 var bgPage = chrome.extension.getBackgroundPage();
-var DEFAULT_MIMETYPES = {
-    'atom': 'application/atom+xml',
-    'document': 'text/html',
-    'spreadsheet': 'text/csv',
-    'presentation': 'text/plain',
-    'pdf': 'application/pdf'
+
+function GDocs() {}
+
+GDocs.prototype.auth = function(interactive, callback) {
+    var access_token = undefined;
+
+    var callbackWrapper = function (getAuthTokenCallbackParam) {
+        access_token = getAuthTokenCallbackParam;
+
+        // Save token in gapi for future requests
+        gapi.auth.setToken({'access_token': access_token});
+
+        callback((typeof access_token !== 'undefined') ? true : false);
+    }
+
+    chrome.identity.getAuthToken({interactive: interactive}, callbackWrapper);
 };
 
-gdocs.GoogleDoc = function (entry) {
-    this.entry = entry;
-    this.title = entry.title.$t;
-    this.resourceId = entry.gd$resourceId.$t.split(':')[1];
-    this.link = {
-        'alternate': gdocs.getLink(entry.link, 'alternate').href
-    };
-    this.type = gdocs.getCategory(entry.category, 'http://schemas.google.com/g/2005#kind');
-    this.content = '';
-};
+GDocs.prototype.getFolderIdByTitle = function(title, callback) {
+    var _this = this;
 
-gdocs.sendRequest = function(url, callback, params) {
-    var handleSuccess = function(response, xhr) {
-        clearTimeout(requestTimer);
-        if (xhr.status !== 200 && xhr.status !== 201 && xhr.status !== 304) {
-            var message = chrome.i18n.getMessage('error_' + xhr.status);
-            memento.setStatusMsg((message) ? message : chrome.i18n.getMessage('error_unknown'), true);
-            return;
+    var request = gapi.client.drive.files.list({
+        'maxResults': 1,
+        'q': 'mimeType = "application/vnd.google-apps.folder" and trashed = false and title = "' + title + '"'
+    });
+
+    request.execute(function(resp) {
+        if(resp.items[0]) {
+            callback(resp.items[0].id); // get id from the first item
+        } else {
+            _this.createFolder(title, callback);
         }
-
-        callback(response, xhr);
-    };
-
-    var requestTimer = setTimeout(function() {
-        memento.setStatusMsg(chrome.i18n.getMessage('request_too_long'));
-    }, 10000);
-
-    bgPage.oauth.sendSignedRequest(url, handleSuccess, params);
+    });
 };
 
-gdocs.getDocumentList = function (opt_url) {
+GDocs.prototype.createFolder = function(title, callback) {
+    var request = gapi.client.drive.files.insert({
+        'resource': {
+            'title': title,
+            'mimeType': 'application/vnd.google-apps.folder'
+        }
+    });
+
+    request.execute(function(resp) {
+        callback(resp.id)
+    });
+};
+
+GDocs.prototype.getDocumentList = function () {
     memento.setStatusMsg(chrome.i18n.getMessage('loading_note_list'));
 
-    var params = {
-        'headers': {
-            'GData-Version': '3.0'
-        },
-        'parameters': {
-            'alt': 'json'
-        }
-    };
-
+    var _this = this;
     bgPage.docs = [];
-    var url = opt_url || bgPage.DOCLIST_FEED + bgPage.folderId + '/contents';
-    var parts = url.split('?');
 
-    if (parts.length > 1) {
-        url = parts[0]; // Extract base URI. Params are passed in separately.
+    var request =  gapi.client.drive.files.list({
+        q : '"' + bgPage.folderId + '" in parents'
+    });
 
-        var extraParts = parts[1].split('&');
-
-        var parameters = {};
-        for (var i = 0, pair; pair = extraParts[i]; ++i) {
-            var param = pair.split('=');
-            parameters[decodeURIComponent(param[0])] = decodeURIComponent(param[1]);
-        }
-
-        params['parameters'] = parameters;
-    }
-
-    gdocs.sendRequest(url, gdocs.processDocListResults, params);
+    request.execute(function(resp) {
+        _this.processDocListResults(resp);
+    });
 };
 
-gdocs.processDocListResults = function (response) {
-    var data = JSON.parse(response);
-
-    if(data.feed.entry){
-        for (var i = 0, entry; entry = data.feed.entry[i]; ++i) {
-            var doc = new gdocs.GoogleDoc(entry);
-            if (doc.type.label === 'document') {
-                bgPage.docs.push(doc);
-            }
+GDocs.prototype.processDocListResults = function (response) {
+    for (var key in response.items) {
+        if (response.items[key].mimeType === 'application/vnd.google-apps.document') {
+            bgPage.docs.push(response.items[key]);
         }
     }
 
-    var nextLink = gdocs.getLink(data.feed.link, 'next');
-
-    if (nextLink) {
-        gdocs.getDocumentList(nextLink.href); // Fetch next page of results.
-    } else {
-        memento.renderDocList();
-    }
+    memento.renderDocList();
 };
 
-gdocs.getFolderIdByTitle = function(title, callback) {
-    var params = {
-        'headers': {
-            'GData-Version': '3.0'
-        },
-        'parameters': {
-            'alt': 'json',
-            'title': title,
-            'showfolders': 'true',
-            'title-exact': 'true'
-        }
-    };
-
-    var handleSuccess = function(response) {
-        var data = JSON.parse(response);
-
-        if(data.feed.entry && data.feed.entry.length > 0) {
-            callback(data.feed.entry[0].gd$resourceId.$t.split(':')[1]); // we are only interested in one folder
-        } else {
-            gdocs.createFolder(title, callback);
-        }
-    };
-
-    gdocs.sendRequest(bgPage.DOCLIST_FEED, handleSuccess, params);
-};
-
-gdocs.getDocById = function(docId, callback) {
-    var params = {
-        'method': 'GET',
-        'headers': {
-            'GData-Version': '3.0'
-        },
-        'parameters': {
-            'alt': 'json'
-        }
-    };
-
-    var handleSuccess = function(response) {
-        memento.clearStatusMsg();
-
-        var doc = new gdocs.GoogleDoc(JSON.parse(response).entry);
-        callback(doc);
-    };
-
-    gdocs.sendRequest(bgPage.DOCLIST_FEED + docId, handleSuccess, params);
-};
-
-gdocs.getDocByTitle = function(title, callback) {
-    var params = {
-        'method': 'GET',
-        'headers': {
-            'GData-Version': '3.0'
-        },
-        'parameters': {
-            'alt': 'json',
-            'title': title,
-            'title-exact': 'true'
-        }
-    };
-
-    var handleSuccess = function(response) {
-        var data = JSON.parse(response);
-
-        var doc = null;
-
-        if(data.feed.entry && data.feed.entry.length > 0) {
-            doc = new gdocs.GoogleDoc(data.feed.entry[0]); // we are only interested in one doc
-        }
-
-        callback(doc);
-    };
-
-    gdocs.sendRequest(bgPage.DOCLIST_FEED, handleSuccess, params);
-};
-
-gdocs.getDocumentContent = function(docId, callback) {
-    memento.setStatusMsg(chrome.i18n.getMessage('loading_note'));
-
-    var params = {
-        'method': 'GET',
-        'headers': {
-            'GData-Version': '3.0'
-        },
-        'parameters': {
-            'id': docId,
-            'exportFormat': 'html',
-            'format': 'html'
-        }
-    };
-
-    var handleSuccess = function(response, xhr) {
-        callback(docId, xhr.responseText);
-    };
-
-    var url = bgPage.DOCLIST_SCOPE + 'download/documents/export/Export';
-    gdocs.sendRequest(url, handleSuccess, params);
-};
-
-gdocs.createDoc = function (title, content, callback) {
+GDocs.prototype.createDoc = function (title, content, callback) {
     memento.setStatusMsg(chrome.i18n.getMessage('creating_note'));
 
-    var params = {
-        'method': 'POST',
-        'headers': {
-            'GData-Version': '3.0',
-            'Content-Type': 'multipart/related; boundary=END_OF_PART'
-        },
-        'parameters': {
-            'alt': 'json'
-        },
-        'body': gdocs.constructContentBody_(title, 'document', content)
+    var metadata = {
+        'title': title,
+        'mimeType': 'text/html',
+        'parents': [{
+            'id': bgPage.folderId
+        }]
     };
 
-    var handleSuccess = function (response) {
-        memento.clearStatusMsg();
-
-        var newDoc = new gdocs.GoogleDoc(JSON.parse(response).entry);
-        bgPage.docs.push(newDoc);
-        callback(newDoc);
-    };
-
-    gdocs.sendRequest(bgPage.DOCLIST_FEED + bgPage.folderId + '/contents', handleSuccess, params);
+    this.modifyDoc(content, metadata, 'POST', callback);
 };
 
-gdocs.updateDoc = function(googleDocObj, callback) {
+GDocs.prototype.updateDoc = function(fileId, title, content, callback) {
     memento.setStatusMsg(chrome.i18n.getMessage('saving_note'));
 
-    var params = {
-        'method': 'PUT',
-        'headers': {
-            'GData-Version': '3.0',
-            'Content-Type': 'multipart/related; boundary=END_OF_PART',
-            'If-Match': '*'
+    var metadata = {'title': title };
+
+    this.modifyDoc(content, metadata, 'PUT', callback, fileId);
+};
+
+GDocs.prototype.modifyDoc = function (content, metadata, method, callback, fileId) {
+    var boundary = '-------314159265358979323846';
+    var delimiter = '\r\n--' + boundary + '\r\n';
+    var close_delim = '\r\n--' + boundary + '--';
+
+    var contentType = 'text/html';
+
+    var multipartRequestBody =
+        delimiter +
+        'Content-Type: application/json\r\n\r\n' +
+        JSON.stringify(metadata) +
+        delimiter +
+        'Content-Type: ' + contentType + '\r\n' +
+        '\r\n' +
+        content +
+        close_delim;
+
+    var request = gapi.client.request({
+        'path': '/upload/drive/v2/files/' + ((fileId) ? fileId : ''),
+        'method': method,
+        'params': {
+            'uploadType': 'multipart',
+            'alt': 'json',
+            'convert': true
         },
-        'parameters': {'alt': 'json', 'expand-acl': true, 'format': 'html'},
-        'body': gdocs.constructContentBody_(googleDocObj.title, 'document', googleDocObj.content)
-    };
+        'headers': {
+          'Content-Type': 'multipart/mixed; boundary="' + boundary + '"'
+        },
+        'body': multipartRequestBody});
 
-    var handleSuccess = function(response) {
-        /*//TODO forced to get again the doc to update etag :( must exist a better way...
-        gdocs.getDocById(googleDocObj.resourceId, function(doc){
-            memento.clearStatusMsg();
-            callback(doc);
-        });*/
-        var doc = new gdocs.GoogleDoc(JSON.parse(response).entry);
+    request.execute(callback);
+};
 
+GDocs.prototype.getDocById = function(docId, callback) {
+    var request = gapi.client.drive.files.get({
+        'fileId': docId
+    });
+
+    request.execute(function(resp) {
         memento.clearStatusMsg();
-        callback(doc);
-    };
-
-    var url = 'https://docs.google.com/feeds/default/media/'+ googleDocObj.resourceId; //TODO createsession
-    gdocs.sendRequest(url, handleSuccess, params);
+        callback(resp);
+    });
 };
 
-gdocs.deleteDoc = function (docId, callback) {
+GDocs.prototype.getDocumentContent = function(docId, callback) {
+    memento.setStatusMsg(chrome.i18n.getMessage('loading_note'));
+    var _this = this;
+
+    var request = gapi.client.drive.files.get({
+        'fileId': docId
+    });
+
+    request.execute(function(resp) {
+        _this.getFileContents(resp, callback);
+    });
+};
+
+GDocs.prototype.getFileContents = function(file, callback) {
+    if (file.exportLinks['text/html']) {
+        var auth = gapi.auth.getToken();
+        var xhr = new XMLHttpRequest();
+        var url = file.exportLinks['text/html'];
+
+        xhr.open('GET', url);
+        xhr.setRequestHeader('Authorization', 'Bearer ' + auth.access_token);
+        xhr.responseType = 'text';
+        xhr.onload = function() {
+            callback(file.id, xhr.responseText);
+        };
+        xhr.onerror = function() {
+            callback(null);
+        };
+        xhr.send();
+    } else {
+        callback(null);
+    }
+};
+
+GDocs.prototype.deleteDoc = function (docId, callback) {
     memento.setStatusMsg(chrome.i18n.getMessage('deleting_note'));
-    var params = {
-        'method': 'DELETE',
-        'headers': {
-            'GData-Version': '3.0',
-            'If-Match': '*'
-        }
-    };
 
-    var handleSuccess = function () {
-        callback();
-    };
+    var request = gapi.client.drive.files.delete({
+        'fileId': docId
+    });
 
-    gdocs.sendRequest(bgPage.DOCLIST_FEED + docId, handleSuccess, params);
+    request.execute(callback);
 };
 
-gdocs.createFolder = function(title, callback) {
-    var params = {
-        'method': 'POST',
-        'headers': {
-            'GData-Version': '3.0',
-            'Content-Type': 'application/atom+xml'
-        },
-        'parameters': {
-            'alt': 'json'
-        },
-        'body': gdocs.constructAtomXml_(title, 'folder')
-    };
+GDocs.prototype.getDocByTitle = function(title, callback) {
+    var request = gapi.client.drive.files.list({
+        'maxResults': 1,
+        'q': 'mimeType = "application/vnd.google-apps.folder" and trashed = false and title = "' + title + '"'
+    });
 
-    var handleSuccess = function(response) {
-        var resourceId = JSON.parse(response).entry.gd$resourceId.$t.split(':')[1];
-        callback(resourceId);
-    };
-
-    gdocs.sendRequest(bgPage.DOCLIST_FEED, handleSuccess, params);
-};
-
-gdocs.getLink = function (links, rel) {
-    for (var i = 0, link; link = links[i]; ++i) {
-        if (link.rel === rel) {
-            return link;
-        }
-    }
-    return null;
-};
-
-gdocs.constructContentBody_ = function(title, docType, content) {
-    var body = ['--END_OF_PART\r\n',
-        'Content-Type: application/atom+xml;\r\n\r\n',
-        gdocs.constructAtomXml_(title, docType), '\r\n',
-        '--END_OF_PART\r\n',
-        'Content-Type: ', DEFAULT_MIMETYPES[docType], '\r\n\r\n',
-        content, '\r\n',
-        '--END_OF_PART--\r\n'].join('');
-    return body;
-};
-
-gdocs.constructAtomXml_ = function(title, type) {
-    var atom = ['<?xml version="1.0" encoding="UTF-8"?>',
-        '<entry xmlns="http://www.w3.org/2005/Atom">',
-        '<category scheme="http://schemas.google.com/g/2005#kind" term="http://schemas.google.com/docs/2007#', type, '"/>',
-        '<title type="text">', title, '</title>',
-        '</entry>'].join('');
-    return atom;
-};
-
-gdocs.getCategory = function (categories, scheme, opt_term) {
-    for (var i = 0, cat; cat = categories[i]; ++i) {
-        if (opt_term) {
-            if (cat.scheme === scheme && opt_term === cat.term) {
-                return cat;
-            }
-        } else if (cat.scheme === scheme) {
-            return cat;
-        }
-    }
-    return null;
+    request.execute(callback);
 };

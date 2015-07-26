@@ -1,162 +1,67 @@
-@import "variables";
+@import 'variables';
 
-@font-face {
-    font-family: "Feathergraphy";
-    src: url("../fonts/Feathergraphy2.ttf");
-}
-
-@font-face {
-    font-family: 'WalkDaWalkOne';
-    src: url('../fonts/WalkDaWalkOne.ttf') format('truetype');
-}
-
-@font-face {
-    font-family: 'Permanent Marker';
-    src: url('../fonts/PermanentMarker.ttf') format('truetype');
-}
-
-html,
 body {
-    height:100%;
-    padding: 0;
+    background-color: #f5f5f5;
+    color: #333;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 14px;
+    line-height: 20px;
     margin: 0;
+    padding-bottom: 40px;
 }
 
-body {
-    background: #463D37 url(../img/bg.jpg) no-repeat center center fixed;
-    background-size: cover;
+label {
+    margin: 0 20px 5px 0;
 }
 
-    .wrapper {
-        text-align: center;
-        height:100%;
+label,
+select,
+button,
+input[type="button"],
+input[type="submit"],
+input[type="radio"],
+input[type="checkbox"] {
+    cursor: pointer;
+}
+
+hr {
+    border: 0;
+    border-top: 1px solid #eee;
+    border-bottom: 1px solid #fff;
+    margin: 20px 0;
+}
+
+.wrapper {
+    margin: 0 auto;
+}
+
+.container {
+    margin: 100px auto 0;
+    width: 400px;
+}
+
+.header,
+.footer {
+    margin: 10px 0;
+    text-align: center;
+}
+
+.header {
+    font-size: 30px;
+}
+
+.options {
+    background-color: #fff;
+    border: 1px solid #e5e5e5;
+    border-radius: 5px;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, .05);
+    padding: 19px 29px 29px;
+
+    .title {
+        margin-bottom: 10px;
     }
+}
 
-    .wrapper:before {
-        content: '';
-        display: inline-block;
-        height: 100%;
-        vertical-align: middle;
-        margin-right: -0.25em;
-    }
-
-        .polaroid {
-            display: inline-block;
-            vertical-align: middle;
-            width: 500px;
-            height: 500px;
-            background: #fff;
-            border-radius: 1px;
-            padding: 20px 20px 100px;
-            box-shadow: 0 1px 5px rgba(0,0,0,1);
-            -webkit-transform: rotate(-5deg);
-        }
-
-        .polaroid:before {
-            content: "";
-            position: absolute;
-            z-index: -1;
-            top: 0;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background: url(../img/agedTexture.jpg) center center;
-            /*background-size: 100%;*/
-            background-size: 100%;
-            opacity: .6;
-        }
-
-            .polaroid .tape {
-                position:absolute;
-                height: 45px;
-                background: rgba(214, 172, 45, .2);
-                border-left: 1px dashed rgba(0, 0, 0, .2);
-                border-right: 1px dashed rgba(0, 0, 0, .2);
-                box-shadow: 0 0 3px rgba(0, 0, 0, .2);
-            }
-
-            .polaroid .tape:before {
-                content: "";
-                position: absolute;
-                z-index: -1;
-                top: 0;
-                bottom: 0;
-                left: 0;
-                right: 0;
-                background: url(../img/agedTexture.jpg) center center;
-                background-size: 100% 100%;
-                opacity: .3;
-            }
-
-                .polaroid .tape.top {
-                    width: 260px;
-                    top:-20px; left:165px;
-                    -webkit-transform: rotate(.5deg);
-                }
-
-                .polaroid .tape.bottom {
-                    width: 250px;
-                    bottom:-25px; left:150px;
-                    border-left: 1px dashed rgba(0, 0, 0, .1);
-                    border-right: 1px dashed rgba(0, 0, 0, .1);
-                    -webkit-transform: rotate(-4deg);
-                }
-
-            .polaroid .photo {
-                background: url(../img/polaroidPhoto.jpg) no-repeat center center;
-                background-size: 100%;
-                box-shadow:inset 0 0 2px #000;
-                height: 100%;
-                color: rgba(0, 0, 0, .6);
-                padding: 0;
-            }
-
-                .polaroid .photo .editor {
-                    position: absolute;
-                    top: 255px;
-                    left: 30px;
-                    -webkit-transform: rotate(-25deg) skew(0,0) translate3d( 0, 0, 0);
-                    font-family: 'WalkDaWalkOne', arial, sans-serif;
-                    width: 300px;
-                    text-align: left;
-                    font-size: 2.5em;
-                    white-space: nowrap;
-                }
-
-                    .polaroid .photo .editor .editor-title .char1 { font-size: 1.35em; }
-                    .polaroid .photo .editor .editor-title .char2 { font-size: 1.3em; }
-                    .polaroid .photo .editor .editor-title .char3 { font-size: 1.25em; }
-                    .polaroid .photo .editor .editor-title .char4 { font-size: 1.2em; }
-                    .polaroid .photo .editor .editor-title .char5 { font-size: 1.15em; }
-                    .polaroid .photo .editor .editor-title .char6 { font-size: 1.1em; }
-
-                    .polaroid .photo .editor .editor-title, .polaroid .photo .editor .option {
-                        cursor: pointer;
-                    }
-
-                    .polaroid .photo .editor .option {
-                        display: none;
-                    }
-
-                .polaroid .photo .number-of-notes {
-                    position: absolute;
-                    top: 350px;
-                    right: 200px;
-                    -webkit-transform: rotate(-40deg) skew(0,0) translate3d( 0, 0, 0);
-                    font-family: 'Feathergraphy', arial, sans-serif;
-                    font-size: 3.1em;
-                    width: 350px;
-                    text-align: right;
-                }
-
-                    .polaroid .photo .number-of-notes .option {
-                        cursor: pointer;
-                        display:none;
-                    }
-
-                .polaroid .title-photo {
-                    color: #222;
-                    font-family: 'Permanent Marker', arial, sans-serif;
-                    font-size: 3em;
-                    margin-top: 0;
-                }
+.footer {
+    font-size: 85%;
+}
