@@ -30,12 +30,10 @@
     "update_url": "http://clients2.google.com/service/update2/crx",
     "minimum_chrome_version": "29",
     "oauth2": {
-        "auto_approve": true,
         "client_id": "55653011280-7mjku7gpmkldsln8tgurj8updljhfep1.apps.googleusercontent.com",
         "scopes": [
             "https://www.googleapis.com/auth/drive.file"
         ]
     },
-    "content_security_policy": "script-src 'self' https://apis.google.com; object-src 'self'",
     "key": "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCnE04qi7o5qAw1cm3ox37hQCIbIRSgciXePWx9QvnWOF7cyHdV81NLcyxRSfmsHox8dUYuagc42SHMpTkXNqIm2G++qA1AQ1ZUtnlWmkIEFMz3rtTBOWZX7JBrzGox02Fie6TLHdK8Cjo4lVjXBzDa2TZpkxnJK7MQCNQClXGqoQIDAQAB"
 }

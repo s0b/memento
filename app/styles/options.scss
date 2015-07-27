@@ -17,10 +17,9 @@ label {
 label,
 select,
 button,
-input[type="button"],
-input[type="submit"],
-input[type="radio"],
-input[type="checkbox"] {
+.button,
+.radio,
+.checkbox {
     cursor: pointer;
 }
 

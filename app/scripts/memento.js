@@ -5,9 +5,9 @@ var bgPage = chrome.extension.getBackgroundPage();
 var typingTimer = null;
 var gdocs = new GDocs();
 
-function gapiIsLoaded() {
+/*function gapiIsLoaded() {
   gapi.client.load('drive', 'v2', init);
-}
+}*/
 
 memento.loadI18nStrings = function () {
     var nodes = document.querySelectorAll('[class^="i18n_"]');
@@ -182,7 +182,9 @@ memento.createNote = function () {
         $('.button.save').text('');
         $('.button.save').addClass('processing');
 
-        gdocs.createDoc(title, content, handleSuccess);
+        memento.setStatusMsg(chrome.i18n.getMessage('creating_note'));
+
+        gdocs.createDoc(title, content, bgPage.folderId, handleSuccess);
     } else {
         $('#input-title').addClass('error');
     }
@@ -214,6 +216,9 @@ memento.setNoteContent = function (docId, content) {
         bgPage.doc = doc;
         $('#open-note').attr('etag', doc.etag);
         $('#open-note #input-title').val(doc.title);
+
+        console.log(doc);
+
         memento.updateLastMod(doc.modifiedDate);
         memento.clearStatusMsg();
     });
@@ -269,6 +274,8 @@ memento.updateNote = function () {
     doc.title = $('#input-title').val();
     doc.content = $('#content').contents().find('html').html();
 
+    memento.setStatusMsg(chrome.i18n.getMessage('saving_note'));
+
     gdocs.updateDoc(
         bgPage.doc.id,
         $('#input-title').val(),
@@ -283,26 +290,49 @@ memento.updateNote = function () {
     );
 };
 
+memento.getListOfNotes = function (folderId) {
+    memento.setStatusMsg(chrome.i18n.getMessage('loading_note_list'));
+
+    bgPage.docs = [];
+
+    gdocs.getDocumentList(bgPage.folderId, memento.processListNotes);
+};
+
+memento.processListNotes = function (list) {
+    for (var key in list.items) {
+        if (list.items[key].mimeType === 'application/vnd.google-apps.document') {
+            bgPage.docs.push(list.items[key]);
+        }
+    }
+
+    memento.renderDocList();
+};
+
 memento.openNewTab = function(url) {
     chrome.tabs.create({url: url});
     window.close();
 };
 
 memento.loadSingleNote = function() {
+    memento.setStatusMsg(chrome.i18n.getMessage('creating_note'));
+
     // TODO send also the folderId
     gdocs.getDocByTitle(
         bgPage.defaultDocTitle,
         function(doc){
             var openDoc = function(doc){
-                gdocs.getDocumentContent(doc.id, memento.setNoteContent);
+                memento.getDocumentContent(doc);
             };
 
             if(doc) { // doc exists
                 openDoc(doc)
             } else {  // doc must be created
+                memento.setStatusMsg(chrome.i18n.getMessage('creating_note'));
+
                 gdocs.createDoc(
                     bgPage.defaultDocTitle,
                     '',
+                    bgPage.folderId,
                     function (doc){
                         memento.clearStatusMsg();
                         bgPage.docs.push(doc);
@@ -314,13 +344,28 @@ memento.loadSingleNote = function() {
     );
 };
 
+memento.getDocumentContent = function(reference) {
+    memento.setStatusMsg(chrome.i18n.getMessage('loading_note'));
+
+    var doc = null;
+
+    if(reference !== null && typeof reference === 'object') {
+        doc = reference;
+    } else if (typeof reference === 'string' || reference instanceof String) {
+        doc = bgPage.docs.filter(function (doc) { return doc.id == reference })[0];
+    }
+
+    console.log(doc);
+
+    gdocs.getDocumentContent(doc, memento.setNoteContent);
+}
+
 function init (){
-    gapi.client.load('drive', 'v2', null);
+    //gapi.client.load('drive', 'v2', null);
 
     memento.loadI18nStrings();
 
     gdocs.auth(false, function(loggedIn) {
-        console.log(loggedIn)
 
       if (loggedIn) {
             $('#loading').show();
@@ -337,7 +382,7 @@ function init (){
                     $('#open-note .button.options').show();
 
                     if(bgPage.doc && bgPage.doc.id) {
-                        gdocs.getDocumentContent(bgPage.doc.id, memento.setNoteContent);
+                        memento.getDocumentContent(bgPage.doc);
                     } else {
                         memento.loadSingleNote();
                     }
@@ -347,14 +392,14 @@ function init (){
                     $('.option.delete').show();
 
                     if(bgPage.doc && bgPage.doc.id) {
-                        gdocs.getDocumentContent(bgPage.doc.id, memento.setNoteContent);
+                        memento.getDocumentContent(bgPage.doc);
                     } else {
                         memento.changeScreen('main-screen');
                         if(bgPage.docs && bgPage.docs.length > 0) {
                             memento.renderDocList();
                         }
 
-                        gdocs.getDocumentList();
+                        memento.getListOfNotes(bgPage.folderId);
                     }
                 }
             };
@@ -362,7 +407,15 @@ function init (){
             if(bgPage.folderId) {
                 getFolderIdByTitleCallback();
             } else {
-                gdocs.getFolderIdByTitle(bgPage.folder, getFolderIdByTitleCallback);
+                gdocs.getFolderIdByTitle(bgPage.folder, function(folderId){
+                    // TODO looks strange, it can be improved
+                    if(folderId) {
+                        getFolderIdByTitleCallback(folderId)
+                    } else {
+                        console.log(bgPage.folder);
+                        gdocs.createFolder(bgPage.folder, getFolderIdByTitleCallback);
+                    }
+                });
             }
       } else {
             $('#first-time').show();
@@ -371,11 +424,12 @@ function init (){
 }
 
 $(document).ready(function () {
+init();
+
     // buttons
     $('.button.back').click(function() {
         memento.changeScreen('main-screen');
-        // TODO gdocs
-        gdocs.getDocumentList();
+        memento.getListOfNotes(bgPage.folderId);
     });
 
     $('.button.authorize').click(function() {
@@ -417,6 +471,7 @@ $(document).ready(function () {
 
     $('.option.newtab').click(function() {
         gdocs.getDocById(bgPage.doc.id, function(doc){
+            memento.clearStatusMsg();
             memento.openNewTab(bgPage.doc.alternateLink);
         });
     });
@@ -438,17 +493,20 @@ $(document).ready(function () {
     });
 
     $('.option.sure').click(function() {
+        memento.setStatusMsg(chrome.i18n.getMessage('deleting_note'));
+
         gdocs.deleteDoc(
             bgPage.doc.id,
             function(){
+                memento.clearStatusMsg();
                 memento.changeScreen('main-screen');
-                gdocs.getDocumentList();
+                memento.getListOfNotes(bgPage.folderId);
             }
         );
     });
 
     $('.option.reload').click(function() {
-        gdocs.getDocumentContent(bgPage.doc.id, memento.setNoteContent);
+        memento.getDocumentContent(bgPage.doc);
     });
 
     $('.button.dropdown').click(function(e) {
@@ -468,7 +526,7 @@ $(document).ready(function () {
     });
 
     $('.option.refresh').click(function() {
-        gdocs.getDocumentList();
+        memento.getListOfNotes(bgPage.folderId);
     });
 
 // inputs
@@ -523,6 +581,6 @@ $(document).ready(function () {
     });
 
     $('#note-list').on('click', '.note-list-item .doc-title', function(){
-        gdocs.getDocumentContent($(this).attr('link'), memento.setNoteContent);
+        memento.getDocumentContent($(this).attr('link'));
     });
 });
