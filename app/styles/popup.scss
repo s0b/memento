@@ -74,13 +74,13 @@ input {
 
 #loading,
 #first-time,
-#main-screen,
+#list,
 #open-note {
     display: none;
 }
 
 #first-time,
-#main-screen {
+#list {
     width: 400px;
 }
 
@@ -127,7 +127,7 @@ input {
 
 // ---
 
-#main-screen {
+#list {
 
     #note-list {
         display: block;

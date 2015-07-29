@@ -158,8 +158,8 @@
     "multiple": {
         "message": "Varias"
     },
-    "new_note": {
-        "message": "Nueva nota"
+    "new": {
+        "message": "Nuevo"
     },
     "new_tab": {
         "message": "Abrir en nueva pestaña"

@@ -158,8 +158,8 @@
     "multiple": {
         "message": "Multiple"
     },
-    "new_note": {
-        "message": "New note"
+    "new": {
+        "message": "New"
     },
     "new_tab": {
         "message": "Open in new tab"

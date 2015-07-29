@@ -22,8 +22,6 @@
     "short_name": "Memento",
     "options_page": "options.html",
     "permissions": [
-        "tabs",
-        "storage",
         "identity"
     ],
     "version": "2",
