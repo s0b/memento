@@ -10,27 +10,18 @@ var note = (function() {
         bindEvents();
 
         // set iframe as editable
-        var contents = $('#content').contents();
-        contents.get(0).designMode = 'on';
-
-        // detect if the note has changes
-        contents.find('html').bind('keyup',function(e){
-            contentChanged(e);
-        });
+        config.noteContent.get(0).designMode = 'on';
     }
 
     var bindEvents = function() {
-        config.button.save.click(save);
         config.title.keyup(titleChanged);
-        // config.button.refresh.click(get);
-        // config.button.options.click(openOptions);
+        config.button.save.click(save);
         config.button.reload.click(open);
         config.button.back.click(back);
         config.button.newtab.click(openInTab);
         config.button.deleteMenu.click(deleteMenuShow);
         config.button.remove.click(remove);
-        // config.search.keyup(search);
-        // config.list.on('click', '.doc-title', open);
+        config.noteContent.find('html').bind('keyup', contentChanged);
     }
 
     var open = function(reference) {
@@ -47,7 +38,7 @@ var note = (function() {
         }
 
         var setNoteContent = function(doc, content){
-            ui.changeScreen('open-note');
+            ui.changeScreen('note');
 
             // TODO wysiwyg - not proud about this replacements, just a workaround
             // remove styles added by Google Docs
@@ -56,7 +47,7 @@ var note = (function() {
             // avoid an error about moving with arrow keys over empty lines
             content = content.replace(/<span( class=\"[\w]+\")?><\/span>/gi, '<br>');
 
-            $('#content').contents().find('html').html(content);
+            config.noteContent.find('html').html(content);
 
             // FIXME This way to include the css its repeated
             addEditorStyle();
@@ -64,8 +55,8 @@ var note = (function() {
             ui.resize(true);
 
             bgPage.doc = doc;
-            $('#open-note').attr('etag', doc.etag);
-            $('#open-note #input-title').val(doc.title);
+            config.main.attr('etag', doc.etag);
+            config.title.val(doc.title);
 
             updateLastMod(doc.modifiedDate);
             ui.clearStatusMsg();
@@ -111,12 +102,12 @@ var note = (function() {
     }
 
     var deleteMenuShow = function(e){
-        if($('.option.delete').hasClass('active')){
-            $('.option.delete').removeClass('active');
-            $('.dropdown-menu-nested').hide();
+        if(config.button.deleteMenu.hasClass('active')){
+            config.button.deleteMenu.removeClass('active');
+            config.dropdownNested.hide();
         } else {
-            $('.option.delete').addClass('active');
-            $('.dropdown-menu-nested').show();
+            config.button.deleteMenu.addClass('active');
+            config.dropdownNested.show();
         }
 
         e.stopPropagation();
@@ -130,52 +121,49 @@ var note = (function() {
             function(){
                 ui.clearStatusMsg();
                 ui.changeScreen('list');
-                list.get(); // TODO can be managed in UI
+                // TODO remove doc from array and re-render
             }
         );
     }
 
     var addEditorStyle = function() {
-        $('#content').contents().find('head').append(
+        config.noteContent.find('head').append(
             $('<link/>', { rel: 'stylesheet', href: '../styles/document.css', type: 'text/css' })
         );
     }
 
     var save = function(){
-        var title = $('#input-title').val();
-        var content = $('#content').contents().find('html').html();
+        var title = config.title.val();
+        var content = config.noteContent.find('html').html();
 
+        // TOFO the title lenth should be validated in the event, not here
         if(title.length > 0) {
             var handleSuccess = function (doc) {
+                reset()
                 ui.clearStatusMsg();
-                bgPage.docs.push(doc);
-                $('.button.save').removeClass('processing');
-                $('.button.save').text('Ok'); // TODO move to translations
-                $('.button.save').hide();
-                $('.button.dropdown').show();
-                $('#input-title').removeClass('new');
                 updateLastMod(doc.modifiedDate);
-                $('#open-note').attr('etag', doc.etag);
+                bgPage.docs.push(doc);
+                config.main.attr('etag', doc.etag);
                 bgPage.doc = doc;
             };
 
-            $('#input-title').removeClass('error');
-            $('.button.save').text('');
-            $('.button.save').addClass('processing');
+            config.title.removeClass('error');
+            config.button.save.text('');
+            config.button.save.addClass('processing');
 
             ui.setStatusMsg(chrome.i18n.getMessage('creating_note'));
 
             gdocs.createDoc(title, content, bgPage.folderId, handleSuccess);
         } else {
-            $('#input-title').addClass('error');
+            config.title.addClass('error');
         }
     }
 
     var titleChanged = function(e){
-        if($('#input-title').val().length === 0) {
-            $('#input-title').addClass('error');
-        } else if($('#input-title').hasClass('error')) {
-            $('#input-title').removeClass('error');
+        if(config.title.val().length === 0) {
+            config.title.addClass('error');
+        } else if(config.title.hasClass('error')) {
+            config.title.removeClass('error');
 
             if($(this).hasClass('new')) {
                 if(e.keyCode === 13) {
@@ -195,10 +183,10 @@ var note = (function() {
             clearTimeout(typingTimer);
 
             typingTimer = setTimeout(function(){
-                if($('#input-title').val() && $('#input-title').val().length > 0) {
+                if(config.title.val() && config.title.val().length > 0) {
                     bgPage.isUpdating = true;
 
-                    $('#input-title').removeClass('error');
+                    config.title.removeClass('error');
                     /*gdocs.getDocById(bgPage.doc.resourceId, function(doc){
                         if(doc.entry.gd$etag != $("#open-note").attr('etag')) {
                          memento.setStatusMsg(
@@ -222,7 +210,7 @@ var note = (function() {
                     //until the etag check works, just updateNote
                     updateNote();
                 } else {
-                    $('#input-title').addClass('error');
+                    config.title.addClass('error');
                 }
             }, 1000);
         }
@@ -231,18 +219,18 @@ var note = (function() {
     var updateNote = function () {
         var doc = bgPage.doc;
 
-        doc.title = $('#input-title').val();
-        doc.content = $('#content').contents().find('html').html();
+        doc.title = config.title.val();
+        doc.content = config.noteContent.find('html').html();
 
         ui.setStatusMsg(chrome.i18n.getMessage('saving_note'));
 
         gdocs.updateDoc(
             bgPage.doc.id,
-            $('#input-title').val(),
-            $('#content').contents().find('html').html(),
+            config.title.val(),
+            config.noteContent.find('html').html(),
             function(doc) {
                 ui.clearStatusMsg();
-                $('#open-note').attr('etag', doc.etag);
+                config.main.attr('etag', doc.etag);
                 updateLastMod(new Date());
                 bgPage.isUpdating = false;
                 bgPage.doc = doc;
@@ -251,38 +239,53 @@ var note = (function() {
     }
 
     var back = function(){
+        reset();
         ui.changeScreen('list');
+    }
+
+    var reset = function(){
+        bgPage.doc = null;
         clearLastMod();
-        list.get(); // TODO move to ui
+        config.button.save.hide();
+        config.button.save.removeClass('processing');
+        config.button.save.text('Ok'); // TODO move to translations
+        config.button.dropdown.show();
+        config.noteContent.find('html').html('');
+        config.main.removeAttr('etag');
+        config.title.val('');
+        config.title.removeClass('new');
+        config.title.removeClass('error');
+        config.main.removeAttr('etag');
     }
 
     var clearLastMod = function() {
-        $('#last-mod').cuteTime.stop_cuteness();
-        $('#last-mod').html('');
+        config.lastMod.cuteTime.stop_cuteness();
+        config.lastMod.html('');
     }
 
     var updateLastMod = function (date) {
-        $('#last-mod').attr('data-timestamp', new Date(date));
-        $('#last-mod').attr('title', ui.formatDate(date, true));
-        $('#last-mod').cuteTime({ refresh: 10000 })
+        config.lastMod.attr('data-timestamp', new Date(date));
+        config.lastMod.attr('title', ui.formatDate(date, true));
+        config.lastMod.cuteTime({ refresh: 10000 })
     }
 
     var create = function() {
-        ui.changeScreen('open-note');
+        ui.changeScreen('note');
         // memento.clearLastMod(); // TODO it's necessary?
-        $('.button.dropdown').hide();
-        $('.button.save').show();
-        $('#input-title').addClass('new');
+        config.button.dropdown.hide();
+        config.button.save.show();
+        config.title.addClass('new');
 
         // TODO wysiwyg
         addEditorStyle();
     }
 
     init({
-        // main: $('#box'),
+        main: $('#note'),
         button: {
             // new: $('.button.new'),
             // options: $('.option.options'),
+            dropdown: $('#note .button.dropdown'),
             reload: $('.option.reload'),
             newtab: $('.option.newtab'),
             deleteMenu: $('.option.delete'), // TODO move to ui
@@ -291,6 +294,9 @@ var note = (function() {
             save: $('.button.save'),
         },
         title: $('#input-title'),
+        lastMod: $('#last-mod'),
+        noteContent: $('#content').contents(),
+        dropdownNested: $('.dropdown-menu-nested')
         // search: $('#input-search'),
         // list: $('#note-list')
     });

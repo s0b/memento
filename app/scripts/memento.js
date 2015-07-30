@@ -1,4 +1,4 @@
-/* global chrome */
+/* global chrome, note, ui, list, gdocs */
 
 var bgPage = chrome.extension.getBackgroundPage();
 
@@ -13,14 +13,23 @@ function loadI18nStrings() {
             nodes[i].innerHTML = chrome.i18n.getMessage(stringName);
         }
     }
+
+    var inputs = document.querySelectorAll('input');
+    Array.prototype.forEach.call(inputs, function(input) {
+        if (input.placeholder.length > 0) {
+            var stringName = input.placeholder.split(/\s/)[0].substring(5);
+            input.placeholder = chrome.i18n.getMessage(stringName);
+        }
+    });
 }
 
 $(document).ready(function () {
     loadI18nStrings();
 
-    gdocs.auth(false, function(loggedIn) {
-        if (loggedIn) {
-            $('#loading').show();
+    // gdocs.auth(false, function(loggedIn) {
+    gdocs.auth(false, function() {
+        // if (loggedIn) {
+            // $('#loading').show();
 
             var getFolderIdByTitleCallback = function(folderId) {
                 if(folderId){
@@ -51,7 +60,7 @@ $(document).ready(function () {
                         }
 
                         // TODO refactor
-                        list.get(bgPage.folderId);
+                        // list.get(bgPage.folderId);
                     }
                 }
             }
@@ -68,8 +77,8 @@ $(document).ready(function () {
                     }
                 });
             }
-        } else {
-            $('#first-time').show();
-        }
+        // } else {
+        //     $('#first-time').show();
+        // }
     });
 });

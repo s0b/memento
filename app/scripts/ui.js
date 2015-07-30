@@ -11,75 +11,77 @@ var ui = (function() {
 
     var bindEvents = function() {
         config.button.dropdown.on('click', openDropdown);
-        $(document).click(hideDropdown);
+        // $(document).click(hideDropdown);
+        config.main.click(hideDropdown);
     }
 
     var openDropdown = function(e) {
-        if($('.dropdown-menu').is(':visible')){
-            $('.button.dropdown').removeClass('pressed');
-            $('.dropdown-menu').hide();
+        if(config.dropdown.is(':visible')){
+            hideDropdown();
         } else {
-            $('.button.dropdown').addClass('pressed');
-            $('.dropdown-menu').show();
+            config.button.dropdown.addClass('pressed');
+            config.dropdown.show();
         }
 
         e.stopPropagation();
     }
 
     var hideDropdown = function() {
-        $('.option.delete').removeClass('active');
-        $('.dropdown-menu-nested').hide();
-        $('.dropdown-menu').hide();
-        $('.button.dropdown').removeClass('pressed');
+        config.dropdown.hide();
+        config.dropdown.find('.active').removeClass('active');
+        config.dropdownNested.hide();
+        config.button.dropdown.removeClass('pressed');
     }
 
     var changeScreen = function (target) {
-        reset();
+        // reset();
 
-        $('#loading').hide();
-        $('#first-time').hide();
-        $('#list').hide();
-        $('#open-note').hide();
+        config.main.children().not(config.status).hide();
 
         $('#' + target).show();
-        resize(target === 'open-note');
+        resize(target === 'note');
+        if(target === 'list'){
+            list.get();
+        }
     }
 
-    var reset = function(){
-        // TODO too ugly! not proud of this
-        // to main screen
-        bgPage.doc = null;
+    // var reset = function(){
+    //     // TODO too ugly! not proud of this
+    //     // to main screen
+    //     bgPage.doc = null;
 
-        // to open note
-        $('.button.save').hide();
-        $('.button.newtab').show();
-        $('#open-note #input-title').val('');
-        $('#content').contents().find('html').html('');
-        $('#input-title').removeClass('new');
-        $('#input-title').removeClass('error');
-        $('.button.dropdown').show();
-        $('#open-note').removeAttr('etag');
-    }
+    //     // to open note
+    //     // config.button.save.hide();  // unncessary?
+    //     // config.button.newtab.show();  // unncessary?
+    //     // config.noteTitle.val('');  // unncessary?
+    //     // $('#content').contents().find('html').html(''); // unncessary?
+    //     // config.noteTitle.removeClass('new');  // unncessary?
+    //     // config.noteTitle.removeClass('error');  // unncessary?
+    //     config.button.dropdown.show();  // unncessary?
+    //     $('#note').removeAttr('etag');  // unncessary?
+    // }
 
     var resize = function(resizeEditor){
-        var width = $('#list').width();
+        var width = config.list.width();
 
+        // TODO move it to note?
         if(resizeEditor) {
-            var size = (localStorage.getItem('editorSize') !== null) ? localStorage['editorSize'] : bgPage.defaultEditorSize;
+            var size = (localStorage.getItem('editorSize') !== null) ? localStorage.editorSize : bgPage.defaultEditorSize;
 
-            var editorWidth = bgPage.editorSizes[size]['width'];
-            var editorHeight = bgPage.editorSizes[size]['height'];
+            var editorWidth = bgPage.editorSizes[size].width;
+            var editorHeight = bgPage.editorSizes[size].height;
 
-            editorHeight -= $('#open-note').height() - $('#content').height();
+            editorHeight -= config.note.height() - config.content.height();
 
-            $('#content').width(editorWidth);
+            config.content.width(editorWidth);
             // add padding
             // TODO padding as var
-            $('#content').height(editorHeight + 10);
+            config.content.height(editorHeight + 10);
 
             width = editorWidth;
         }
 
+        // TODO can be done on jquery?
         var height = document.getElementById('wrapper').offsetHeight;
 
         document.body.style.width=width;
@@ -101,41 +103,52 @@ var ui = (function() {
         if(fullDate){
             dateFormatted = dateParsed.format(chrome.i18n.getMessage('date_format'));
         } else {
+            var format;
+
             if(sameDay(dateParsed, new Date())){
-                dateFormatted = dateParsed.format('HH:MM');
+                format = 'HH:MM';
             } else {
-                dateFormatted = dateParsed.format('d mmm');
+                format = 'd mmm';
             }
+
+            dateFormatted = dateParsed.format(format);
         }
 
         return dateFormatted;
     }
 
     var setStatusMsg = function (msg, error) {
-        $('#status-msg').removeClass('error');
+        config.status.removeClass('error');
 
         if(msg){
-            $('#status-msg').html(msg).show();
+            config.status.html(msg).show();
             if(error) {
-                $('#status-msg').addClass('error');
+                config.status.addClass('error');
                 setTimeout(function() { //hide error msg
                     clearStatusMsg();
                 }, 5000);
             }
         } else {
-            $('#status-msg').hide();
+            config.status.hide();
         }
     }
 
     var clearStatusMsg = function () {
-        $('#status-msg').removeClass('error');
-        $('#status-msg').hide();
+        config.status.removeClass('error');
+        config.status.hide();
     }
 
     init({
+        main: $('#wrapper'),
         button: {
             dropdown: $('.button.dropdown')
-        }
+        },
+        dropdown: $('.dropdown-menu'),
+        dropdownNested: $('.dropdown-menu-nested'),
+        status: $('#status'),
+        content: $('#content'),
+        list: $('#list'),
+        note: $('#note'),
     });
 
     return {

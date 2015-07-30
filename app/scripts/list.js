@@ -7,9 +7,6 @@ var list = (function() {
     var init = function(cfg) {
         config = cfg;
         bindEvents();
-
-        // TODO move this to the HTML
-        //$('#input-title').attr('placeholder', chrome.i18n.getMessage('title'));
     }
 
     var bindEvents = function() {
@@ -23,9 +20,9 @@ var list = (function() {
     var get = function () {
         ui.setStatusMsg(chrome.i18n.getMessage('loading_note_list'));
 
-        bgPage.docs = [];
-
         var callback = function(list){
+            bgPage.docs = [];
+
             for (var i in list.items) {
                 if (list.items[i].mimeType === 'application/vnd.google-apps.document') {
                     bgPage.docs.push(list.items[i]);
@@ -52,7 +49,7 @@ var list = (function() {
                 '</div>'
             );
         }
-        $('#note-list').html(html.join(''));
+        config.list.html(html.join(''));
         ui.clearStatusMsg();
         ui.resize();
     }
@@ -72,8 +69,9 @@ var list = (function() {
 
         for (var i in bgPage.docs) {
             var doc = bgPage.docs[i];
-            if($('#input-search').val()) {
-                if (doc.title.toLowerCase().indexOf($('#input-search').val().toLowerCase()) === -1){
+            // TODO dont use class to use the ID
+            if(config.search.val()) {
+                if (doc.title.toLowerCase().indexOf(config.search.val().toLowerCase()) === -1){
                     $('.note-list-item.' + doc.id).hide();
                 } else {
                     $('.note-list-item.' + doc.id).show();
@@ -87,7 +85,7 @@ var list = (function() {
     }
 
     init({
-        main: $('#box'),
+        main: $('#list'),
         button: {
             new: $('.button.new'),
             options: $('.option.options'),
