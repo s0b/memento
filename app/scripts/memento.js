@@ -36,7 +36,7 @@ $(document).ready(function () {
                     bgPage.folderId = folderId;
                 }
 
-                if(localStorage.getItem('numberOfNotes') !== null && localStorage['numberOfNotes'] === 'single'){
+                if(localStorage.getItem('numberOfNotes') !== null && localStorage.numberOfNotes === 'single'){
                     $('.button.back').hide();
                     $('.option.delete').hide();
                     $('#open-note .button.options').show();

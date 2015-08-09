@@ -38,6 +38,10 @@ module.exports = function(grunt) {
             html: {
                 files: ['<%= config.app %>/{,*/}*.html'],
                 tasks: ['copy:chrome']
+            },
+            img: {
+                files: ['<%= config.app %>/{,*/}*.png'],
+                tasks: ['copy:chrome']
             }
         },
 

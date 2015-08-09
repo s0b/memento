@@ -34,8 +34,6 @@ var ui = (function() {
     }
 
     var changeScreen = function (target) {
-        // reset();
-
         config.main.children().not(config.status).hide();
 
         $('#' + target).show();
@@ -45,41 +43,8 @@ var ui = (function() {
         }
     }
 
-    // var reset = function(){
-    //     // TODO too ugly! not proud of this
-    //     // to main screen
-    //     bgPage.doc = null;
-
-    //     // to open note
-    //     // config.button.save.hide();  // unncessary?
-    //     // config.button.newtab.show();  // unncessary?
-    //     // config.noteTitle.val('');  // unncessary?
-    //     // $('#content').contents().find('html').html(''); // unncessary?
-    //     // config.noteTitle.removeClass('new');  // unncessary?
-    //     // config.noteTitle.removeClass('error');  // unncessary?
-    //     config.button.dropdown.show();  // unncessary?
-    //     $('#note').removeAttr('etag');  // unncessary?
-    // }
-
-    var resize = function(resizeEditor){
+    var resize = function(){
         var width = config.list.width();
-
-        // TODO move it to note?
-        if(resizeEditor) {
-            var size = (localStorage.getItem('editorSize') !== null) ? localStorage.editorSize : bgPage.defaultEditorSize;
-
-            var editorWidth = bgPage.editorSizes[size].width;
-            var editorHeight = bgPage.editorSizes[size].height;
-
-            editorHeight -= config.note.height() - config.content.height();
-
-            config.content.width(editorWidth);
-            // add padding
-            // TODO padding as var
-            config.content.height(editorHeight + 10);
-
-            width = editorWidth;
-        }
 
         // TODO can be done on jquery?
         var height = document.getElementById('wrapper').offsetHeight;

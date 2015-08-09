@@ -29,7 +29,8 @@ var note = (function() {
 
         var doc = null;
 
-        if(reference !== null && typeof reference === 'object') {
+        // check if it's an object but not an event
+        if(reference !== null && typeof reference === 'object' && !reference.target) {
             doc = reference;
         } else if (typeof reference === 'string' || reference instanceof String) {
             doc = bgPage.docs.filter(function (doc) { return doc.id == reference })[0];
@@ -52,7 +53,8 @@ var note = (function() {
             // FIXME This way to include the css its repeated
             addEditorStyle();
 
-            ui.resize(true);
+            resizeEditor();
+            ui.resize();
 
             bgPage.doc = doc;
             config.main.attr('etag', doc.etag);
@@ -63,6 +65,22 @@ var note = (function() {
         }
 
         gdocs.getDocumentContent(doc, setNoteContent);
+    }
+
+    var resizeEditor = function(){
+        var size = (localStorage.getItem('editorSize') !== null) ? localStorage.editorSize : bgPage.defaultEditorSize;
+
+        var editorWidth = bgPage.editorSizes[size].width;
+        var editorHeight = bgPage.editorSizes[size].height;
+
+        editorHeight -= config.main.height() - $('#content').height();
+
+        $('#content').width(editorWidth);
+        // add padding
+        // TODO padding as var
+        $('#content').height(editorHeight + 10);
+
+        width = editorWidth;
     }
 
     // TODO can be improved
@@ -94,11 +112,7 @@ var note = (function() {
     }
 
     var openInTab = function(){
-        // TODO search in bgPage.docs[], a new request is not needed
-        gdocs.getDocById(bgPage.doc.id, function(doc){
-            ui.clearStatusMsg();
-            window.open(bgPage.doc.alternateLink);
-        });
+        window.open(bgPage.doc.alternateLink);
     }
 
     var deleteMenuShow = function(e){
@@ -121,22 +135,30 @@ var note = (function() {
             function(){
                 ui.clearStatusMsg();
                 ui.changeScreen('list');
+
+                bgPage.docs.filter(function (doc) { return doc.id == reference })[0];
                 // TODO remove doc from array and re-render
             }
         );
     }
 
     var addEditorStyle = function() {
-        config.noteContent.find('head').append(
+        var head = config.noteContent.find('head');
+        head.append(
             $('<link/>', { rel: 'stylesheet', href: '../styles/document.css', type: 'text/css' })
         );
+
+        var wordWrap = (localStorage.getItem('wordWrap') !== null) ? localStorage.wordWrap : bgPage.defaultWordWrap;
+        if(wordWrap === 'true') {
+            head.append('<style type="text/css">body {white-space: normal;}</style>');
+        }
     }
 
     var save = function(){
         var title = config.title.val();
         var content = config.noteContent.find('html').html();
 
-        // TOFO the title lenth should be validated in the event, not here
+        // TODO the title lenth should be validated in the event, not here
         if(title.length > 0) {
             var handleSuccess = function (doc) {
                 reset()
@@ -162,8 +184,11 @@ var note = (function() {
     var titleChanged = function(e){
         if(config.title.val().length === 0) {
             config.title.addClass('error');
-        } else if(config.title.hasClass('error')) {
-            config.title.removeClass('error');
+        } else {
+
+            if(config.title.hasClass('error')) {
+                config.title.removeClass('error');
+            }
 
             if($(this).hasClass('new')) {
                 if(e.keyCode === 13) {
@@ -187,25 +212,6 @@ var note = (function() {
                     bgPage.isUpdating = true;
 
                     config.title.removeClass('error');
-                    /*gdocs.getDocById(bgPage.doc.resourceId, function(doc){
-                        if(doc.entry.gd$etag != $("#open-note").attr('etag')) {
-                         memento.setStatusMsg(
-                         chrome.i18n.getMessage("note_outdated")
-                         + " <span class='msgReload'>" + chrome.i18n.getMessage("reload")
-                         + "</span> <span class='msgSave'>" + chrome.i18n.getMessage("save") + "</span>"
-                         );
-
-                         $(".msgReload").on('click',function(){
-                         gdocs.getDocumentContent(bgPage.doc.resourceId, memento.setNoteContent);
-                         });
-
-                         $(".msgSave").on('click',function(){
-                         memento.updateNote(doc);
-                         });
-                         } else {
-                         memento.updateNote(doc);
-                         }
-                    });*/
 
                     //until the etag check works, just updateNote
                     updateNote();
@@ -270,6 +276,7 @@ var note = (function() {
     }
 
     var create = function() {
+        resizeEditor();
         ui.changeScreen('note');
         // memento.clearLastMod(); // TODO it's necessary?
         config.button.dropdown.hide();
@@ -283,8 +290,6 @@ var note = (function() {
     init({
         main: $('#note'),
         button: {
-            // new: $('.button.new'),
-            // options: $('.option.options'),
             dropdown: $('#note .button.dropdown'),
             reload: $('.option.reload'),
             newtab: $('.option.newtab'),
@@ -295,14 +300,14 @@ var note = (function() {
         },
         title: $('#input-title'),
         lastMod: $('#last-mod'),
+        note: $('#content'),
         noteContent: $('#content').contents(),
         dropdownNested: $('.dropdown-menu-nested')
-        // search: $('#input-search'),
-        // list: $('#note-list')
     });
 
     return {
         open: open,
+        openSingleNote: openSingleNote,
         create: create
     }
 

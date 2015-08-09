@@ -68,6 +68,9 @@
     "error_unknown": {
         "message": "Error desconocido :("
     },
+    "feedback": {
+        "message": "Escribeme y mejorare esto :) <a href='mailto:dmartinfrutos@gmail.com'>dmartinfrutos@gmail.com</a>"
+    },
     "just_now": {
         "message": "Ahora mismo"
     },
@@ -173,11 +176,17 @@
     "options": {
         "message": "Opciones"
     },
+    "options_linkify": {
+        "message": "Convertir automaticamente urls en enlaces"
+    },
     "options_size_title": {
         "message": "Tamaño del editor"
     },
     "options_number_title": {
         "message": "Una o varias notas?"
+    },
+    "options_word_wrap": {
+        "message": "Romper palabras largas en dos lineas"
     },
     "refresh": {
         "message": "Actualizar"

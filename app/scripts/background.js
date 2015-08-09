@@ -1,5 +1,7 @@
 /* jshint unused: false */
 
+// Icon from: http://www.iconarchive.com/show/100-flat-icons-by-graphicloads/note-icon.html
+
 var doc = null;
 var docs = [];
 
@@ -9,6 +11,8 @@ var folderId = null;
 var defaultDocTitle = 'Memento';
 var defaultEditorSize = 'medium';
 var defaultNumberOfNotes = 'multi';
+var defaultWordWrap = false;
+var defaultLinkify = true;
 
 var editorSizes = {
     'small': {

@@ -68,6 +68,9 @@
     "error_unknown": {
         "message": "Unknown error :("
     },
+    "feedback": {
+        "message": "Something to mention? Please drop me a mail! <a href='mailto:dmartinfrutos@gmail.com'>dmartinfrutos@gmail.com</a>"
+    },
     "just_now": {
         "message": "Just now"
     },
@@ -173,11 +176,17 @@
     "options": {
         "message": "Options"
     },
+    "options_linkify": {
+        "message": "Convert automatically urls to links"
+    },
     "options_size_title": {
         "message": "Size of the text editor"
     },
     "options_number_title": {
         "message": "Single or multiple notes?"
+    },
+    "options_word_wrap": {
+        "message": "Break long words into new line"
     },
     "refresh": {
         "message": "Refresh"
