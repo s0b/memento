@@ -215,7 +215,6 @@ module.exports = function(grunt) {
         chromeManifest: {
             dist: {
                 options: {
-                    buildnumber: 'both',
                     background: {
                         target: 'scripts/background.js'
                     }
@@ -258,17 +257,16 @@ module.exports = function(grunt) {
 
     grunt.registerTask('build', [
         'clean:dist',
-        'jshint',
+        //'jshint',
         'chromeManifest:dist',
         'concurrent:dist',
-        // TODO uglify
         'copy:dist'
     ]);
 
     grunt.registerTask('default', function() {
         grunt.task.run([
             'clean:dist',
-            //'jshint',
+            'jshint',
             'concurrent:chrome',
             'copy:chrome',
             'watch',
