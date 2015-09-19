@@ -92,7 +92,7 @@ var gdocs = (function() {
             },
             'callback': function(resp) {
                 if(resp.items[0]) {
-                    callback(resp.items[0]); // get id from the first item
+                    callback(resp.items[0]);
                 } else {
                     callback(null);
                 }

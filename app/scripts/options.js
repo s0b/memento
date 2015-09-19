@@ -45,15 +45,14 @@ $(document).ready(function () {
     });
 
     $('input[type=radio][name=number]').change(function() {
-        console.log('cambia a ' + $(this).val());
         localStorage.numberOfNotes = $(this).val();
     });
 
     $('input[type=checkbox][name=word-wrap]').change(function() {
-        localStorage.wordWrap = $(this).is(":checked");
+        localStorage.wordWrap = $(this).is(':checked');
     });
 
     $('input[type=checkbox][name=linkify]').change(function() {
-        localStorage.linkify = $(this).is(":checked");
+        localStorage.linkify = $(this).is(':checked');
     });
 });

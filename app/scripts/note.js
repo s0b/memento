@@ -79,8 +79,6 @@ var note = (function() {
         // add padding
         // TODO padding as var
         $('#content').height(editorHeight + 10);
-
-        width = editorWidth;
     }
 
     // TODO can be improved
@@ -136,6 +134,7 @@ var note = (function() {
                 ui.clearStatusMsg();
                 ui.changeScreen('list');
 
+                // FIXME why reference?
                 bgPage.docs.filter(function (doc) { return doc.id == reference })[0];
                 // TODO remove doc from array and re-render
             }
