@@ -5,7 +5,10 @@
         ]
     },
     "browser_action": {
-        "default_icon": "images/32.png",
+        "default_icon": {
+            "19": "images/19.png",
+            "38": "images/76.png"
+        },
         "default_popup": "popup.html",
         "default_title": "Memento"
     },
@@ -13,15 +16,10 @@
     "description": "__MSG_memento_description__",
     "icons": {
         "16": "images/16.png",
-        "24": "images/24.png",
+        "19": "images/19.png",
         "32": "images/32.png",
-        "48": "images/48.png",
-        "64": "images/64.png",
-        "72": "images/72.png",
-        "96": "images/96.png",
-        "128": "images/128.png",
-        "256": "images/256.png",
-        "512": "images/512.png"
+        "76": "images/76.png",
+        "128": "images/128.png"
     },
     "key": "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCnE04qi7o5qAw1cm3ox37hQCIbIRSgciXePWx9QvnWOF7cyHdV81NLcyxRSfmsHox8dUYuagc42SHMpTkXNqIm2G++qA1AQ1ZUtnlWmkIEFMz3rtTBOWZX7JBrzGox02Fie6TLHdK8Cjo4lVjXBzDa2TZpkxnJK7MQCNQClXGqoQIDAQAB",
     "manifest_version": 2,
