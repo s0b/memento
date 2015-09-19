@@ -90,7 +90,13 @@ var gdocs = (function() {
                 'maxResults': 1,
                 'q': 'mimeType = "application/vnd.google-apps.document" and trashed = false and title = "' + title + '"'
             },
-            'callback': callback
+            'callback': function(resp) {
+                if(resp.items[0]) {
+                    callback(resp.items[0]); // get id from the first item
+                } else {
+                    callback(null);
+                }
+            }
         });
     };
 
