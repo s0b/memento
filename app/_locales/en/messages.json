@@ -69,7 +69,7 @@
         "message": "Unknown error :("
     },
     "feedback": {
-        "message": "Something to mention? Please drop me a mail! <a href='mailto:dmartinfrutos@gmail.com'>dmartinfrutos@gmail.com</a>"
+        "message": "<a href='mailto:dmartinfrutos@gmail.com'>dmartinfrutos@gmail.com</a>"
     },
     "just_now": {
         "message": "Just now"
@@ -84,7 +84,7 @@
         "message": "Medium"
     },
     "memento_description": {
-        "message": "Take text notes and synchronize them with your Google Account."
+        "message": "Save text notes to your Google Drive account."
     },
     "month_1": {
         "message": "january"
