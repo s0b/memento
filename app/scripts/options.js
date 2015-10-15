@@ -10,7 +10,13 @@ function restoreOptions() {
     $('.editor input[value=' + size + ']').prop('checked', true );
 
     // notes
-    var numberOfNotes = (localStorage.getItem('numberOfNotes') !== null) ? localStorage.numberOfNotes : bgPage.defaultNumberOfNotes;
+    var numberOfNotes;
+    if(localStorage.getItem('numberOfNotes') !== null) {
+        numberOfNotes = localStorage.numberOfNotes;
+    } else {
+        numberOfNotes = bgPage.defaultNumberOfNotes;
+    }
+
     $('.number-of-notes input[value=' +  numberOfNotes + ']').prop('checked', true );
 
     // word wrap

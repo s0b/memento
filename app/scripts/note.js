@@ -1,4 +1,5 @@
-/* global chrome, bgPage, gdocs, list, ui */
+/* global chrome, bgPage, gdocs, ui */
+/* exported note */
 
 var note = (function() {
 
@@ -33,7 +34,7 @@ var note = (function() {
         if(reference !== null && typeof reference === 'object' && !reference.target) {
             doc = reference;
         } else if (typeof reference === 'string' || reference instanceof String) {
-            doc = bgPage.docs.filter(function (doc) { return doc.id == reference })[0];
+            doc = bgPage.docs.filter(function (doc) { return doc.id === reference })[0];
         } else {
             doc = bgPage.doc;
         }
@@ -134,9 +135,8 @@ var note = (function() {
                 ui.clearStatusMsg();
                 ui.changeScreen('list');
 
-                // FIXME why reference?
-                bgPage.docs.filter(function (doc) { return doc.id == reference })[0];
                 // TODO remove doc from array and re-render
+                // bgPage.docs.filter(function (doc) { return doc.id == reference })[0];
             }
         );
     }
@@ -155,12 +155,11 @@ var note = (function() {
 
     var save = function(){
         var title = config.title.val();
-        var content = config.noteContent.find('html').html();
 
         // TODO the title lenth should be validated in the event, not here
         if(title.length > 0) {
             var handleSuccess = function (doc) {
-                reset()
+                softReset();
                 ui.clearStatusMsg();
                 updateLastMod(doc.modifiedDate);
                 bgPage.docs.push(doc);
@@ -174,6 +173,7 @@ var note = (function() {
 
             ui.setStatusMsg(chrome.i18n.getMessage('creating_note'));
 
+            var content = config.noteContent.find('html').html();
             gdocs.createDoc(title, content, bgPage.folderId, handleSuccess);
         } else {
             config.title.addClass('error');
@@ -203,7 +203,7 @@ var note = (function() {
         var keyCodes = [37, 38, 39, 40];
 
         // check if is a new doc and isnt an arrow key
-        if(((bgPage.doc && bgPage.doc.id) && !bgPage.isUpdating) && jQuery.inArray(e.keyCode, keyCodes) == '-1'){
+        if(((bgPage.doc && bgPage.doc.id) && !bgPage.isUpdating) && jQuery.inArray(e.keyCode, keyCodes) === -1){
             clearTimeout(typingTimer);
 
             typingTimer = setTimeout(function(){
@@ -248,19 +248,23 @@ var note = (function() {
         ui.changeScreen('list');
     }
 
-    var reset = function(){
-        bgPage.doc = null;
+    var softReset = function(){
         clearLastMod();
         config.button.save.hide();
         config.button.save.removeClass('processing');
         config.button.save.text('Ok'); // TODO move to translations
         config.button.dropdown.show();
-        config.noteContent.find('html').html('');
         config.main.removeAttr('etag');
-        config.title.val('');
         config.title.removeClass('new');
         config.title.removeClass('error');
         config.main.removeAttr('etag');
+    }
+
+    var reset = function(){
+        softReset();
+        bgPage.doc = null;
+        config.noteContent.find('html').html('');
+        config.title.val('');
     }
 
     var clearLastMod = function() {

@@ -1,9 +1,10 @@
 /* global chrome */
+/* exported gdocs */
 
 var gdocs = (function() {
 
     // Private variables and functions
-    var access_token = undefined;
+    var access_token;
 
     var auth = function(interactive, callback) {
         var callbackWrapper = function (getAuthTokenCallbackParam) {

@@ -1,4 +1,5 @@
-/* global chrome, bgPage, ui */
+/* global chrome, list */
+/* exported ui */
 
 var ui = (function() {
 

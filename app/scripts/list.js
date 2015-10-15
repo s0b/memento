@@ -1,4 +1,5 @@
 /* global chrome, bgPage, gdocs, note, ui */
+/* exported list */
 
 var list = (function() {
 
