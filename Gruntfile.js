@@ -1,3 +1,5 @@
+/* global module, require */
+
 module.exports = function(grunt) {
 
     // Load grunt tasks automatically
@@ -257,7 +259,7 @@ module.exports = function(grunt) {
 
     grunt.registerTask('build', [
         'clean:dist',
-        //'jshint',
+        'jshint',
         'chromeManifest:dist',
         'concurrent:dist',
         'copy:dist'
